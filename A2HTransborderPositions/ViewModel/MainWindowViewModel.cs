@@ -1,5 +1,6 @@
 ﻿using A2HTransborderPositions.Commands;
 using A2HTransborderPositions.Commands.Base;
+using A2HTransborderPositions.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,7 +15,7 @@ namespace A2HTransborderPositions.ViewModel
     {
         #region Data
 
-
+        private readonly IMixReaderService _mixReaaderService;
 
         #endregion Data
 
@@ -38,9 +39,9 @@ namespace A2HTransborderPositions.ViewModel
 
         #endregion Properties
 
-        public MainWindowViewModel()
+        public MainWindowViewModel(IMixReaderService mixReaaderService)
         {
-
+            _mixReaaderService = mixReaaderService;
         }
 
         #region Commands
@@ -51,6 +52,7 @@ namespace A2HTransborderPositions.ViewModel
         #region Support
 
         private ICommand _CloseApplicationCommand;
+
 
         /// <summary> Закрыть приложение </summary>
         public ICommand CloseApplicationCommand => _CloseApplicationCommand ??=

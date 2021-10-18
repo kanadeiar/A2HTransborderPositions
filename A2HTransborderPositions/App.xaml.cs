@@ -1,4 +1,6 @@
-﻿using A2HTransborderPositions.ViewModel;
+﻿using A2HTransborderPositions.Interfaces;
+using A2HTransborderPositions.Services;
+using A2HTransborderPositions.ViewModel;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Windows;
@@ -16,6 +18,8 @@ namespace A2HTransborderPositions
         }
         private static void InitializeServices(IServiceCollection services)
         {
+            services.AddTransient<IMixReaderService, Sharp7MixReaderService>();
+
             services.AddScoped<MainWindowViewModel>();
         }
         /// <summary> Сервисы </summary>

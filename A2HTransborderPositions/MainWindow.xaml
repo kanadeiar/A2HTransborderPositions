@@ -26,8 +26,43 @@
             </StatusBarItem>
         </StatusBar>
         <TabControl>
-            <TabItem Header="Общий обзор" Height="40">
-                
+            <TabItem Header="Информация" Height="40">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions >
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <GroupBox Header="Управление" Grid.ColumnSpan="2" Grid.Row="0">
+                        <StackPanel Orientation="Horizontal">
+                            <Button Margin="2" Padding="10">Считать текущие позиции</Button>
+                            <Button Margin="2" Padding="10">Начать получение факта</Button>
+                            <Button Margin="2" Padding="10">Прекратить получение факта</Button>
+                        </StackPanel>
+                    </GroupBox>
+                    <GridSplitter Grid.Column="0" Grid.Row="1" Width="5" Background="Transparent"/>
+                    <GroupBox Grid.Column="0" Grid.Row="1" Header="Позиции трансбордера" >
+                        
+                    </GroupBox>
+                    <GroupBox Grid.Column="1" Grid.Row="1" Header="Параметры выбранной позиции" >
+                        
+                    </GroupBox>
+                    
+                    
+                </Grid>
+            </TabItem>
+            <TabItem Header="Установка настроек" Height="40">
+                <Grid>
+                    <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">Находится в разработке</TextBlock>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Автоподстройка" Height="40">
+                <Grid>
+                    <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">Находится в разработке</TextBlock>
+                </Grid>
             </TabItem>
         </TabControl>
 
