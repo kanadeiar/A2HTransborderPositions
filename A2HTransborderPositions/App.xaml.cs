@@ -18,6 +18,8 @@ namespace A2HTransborderPositions
         }
         private static void InitializeServices(IServiceCollection services)
         {
+            services.AddTransient<IRepositoryService, RepositoryService>();
+
             services.AddTransient<IMixReaderService, Sharp7MixReaderService>();
 
             services.AddScoped<MainWindowViewModel>();
