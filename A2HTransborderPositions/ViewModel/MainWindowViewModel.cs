@@ -55,7 +55,7 @@ namespace A2HTransborderPositions.ViewModel
         private ICommand _UpdateApplicationCommand;
 
 
-        /// <summary> Закрыть приложение </summary>
+        /// <summary> Обновить данные приложения </summary>
         public ICommand UpdateApplicationCommand => _UpdateApplicationCommand ??=
             new LambdaCommand(OnUpdateApplicationCommandExecuted, CanUpdateApplicationCommandExecute);
 
@@ -69,6 +69,20 @@ namespace A2HTransborderPositions.ViewModel
             LoadData();
         }
 
+
+        private ICommand _RunApplicationCommand;
+
+
+        /// <summary> Обновить данные приложения </summary>
+        public ICommand RunApplicationCommand => _RunApplicationCommand ??=
+            new LambdaCommand(OnRunApplicationCommandExecuted, CanRunApplicationCommandExecute);
+
+        private bool CanRunApplicationCommandExecute(object p) => true;
+
+        private void OnRunApplicationCommandExecuted(object p)
+        {
+            _mixReaaderService.GetActualValues(out int error, out int pos, out bool left, out bool right);
+        }
 
         #region Support
 

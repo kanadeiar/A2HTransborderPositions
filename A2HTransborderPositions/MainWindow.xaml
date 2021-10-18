@@ -40,10 +40,24 @@
                         <StackPanel Orientation="Horizontal">
                             <Button Margin="2" Padding="10"
                                     Command="{Binding UpdateApplicationCommand}">
-                                Считать текущие позиции из ПЛК
+                                Обновить текущие позиции
                             </Button>
-                            <Button Margin="2" Padding="10">Начать получение фактических</Button>
-                            <Button Margin="2" Padding="10">Прекратить получение фактических</Button>
+                            <Button Margin="2" Padding="10"
+                                    Command="{Binding RunApplicationCommand}">
+                                Получать фактические позиции
+                            </Button>
+                            <StackPanel Margin="5">
+                                <TextBlock>Текущая позиция:</TextBlock>
+                                <TextBlock FontWeight="Bold">0 мм</TextBlock>
+                            </StackPanel>
+                            <StackPanel Margin="5">
+                                <TextBlock>Центратор слева:</TextBlock>
+                                <TextBlock FontWeight="Bold">Открыт</TextBlock>
+                            </StackPanel>
+                            <StackPanel Margin="5">
+                                <TextBlock>Центратор справа:</TextBlock>
+                                <TextBlock FontWeight="Bold">Открыт</TextBlock>
+                            </StackPanel>
                         </StackPanel>
                     </GroupBox>
                     <GridSplitter Grid.Column="0" Grid.Row="1" Width="5" Background="Transparent"/>
@@ -52,9 +66,9 @@
                                   ItemsSource="{Binding Positions}">
                             <DataGrid.Columns>
                                 <DataGridTextColumn Header="Название" Binding="{Binding Name}" Width="150" />
-                                <DataGridTextColumn Header="Текущая в ПЛК" Binding="{Binding CurrentPosition}" />
-                                <DataGridTextColumn Header="Факт" Binding="{Binding FactPosition}" />
-                                <DataGridTextColumn Header="Установить" Binding="{Binding SetPosition}" />
+                                <DataGridTextColumn FontWeight="Bold" Header="Текущая" Binding="{Binding CurrentPosition}" />
+                                <DataGridTextColumn FontWeight="Bold" Header="Фактическое" Binding="{Binding FactPosition}" />
+                                <DataGridTextColumn FontWeight="Bold" Header="Установить" Binding="{Binding SetPosition}" />
                             </DataGrid.Columns>
                             
                         </DataGrid>

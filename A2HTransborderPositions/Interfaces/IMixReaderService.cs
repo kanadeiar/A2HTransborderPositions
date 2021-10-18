@@ -12,5 +12,7 @@ namespace A2HTransborderPositions.Interfaces
         public bool TestConnection(out int error);
         /// <summary> Получение данных текущих позиций </summary>
         public bool GetCurrentPositions(out int error, int[] values);
+
+        public bool GetActualValues(out int error, out int position, out bool left, out bool right);
     }
 }
