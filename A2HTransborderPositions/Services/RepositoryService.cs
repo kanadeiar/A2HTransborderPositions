@@ -25,6 +25,7 @@ namespace A2HTransborderPositions.Services
             for (int i = 0; i < _positions.Count; i++)
             {
                 _positions[i].CurrentPosition = values[i];
+                _positions[i].SetPosition = values[i];
             }
         }
 

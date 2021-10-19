@@ -3,11 +3,17 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:local="clr-namespace:A2HTransborderPositions"
         mc:Ignorable="d"
         Height="700" Width="1000" WindowStartupLocation="CenterScreen" ResizeMode="CanResizeWithGrip" Background="LightGreen"
         Title="{Binding Title}"
         DataContext="{Binding MainWindowViewModel, Source={StaticResource Locator}}">
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Loaded">
+            <i:InvokeCommandAction Command="{Binding UpdateApplicationCommand}"/>
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
     <DockPanel>
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="Главное меню">
@@ -96,8 +102,29 @@
                             <TextBlock FontWeight="Bold" Text="{Binding ErrorPosition}"/>
                             <TextBlock FontSize="12" TextWrapping="Wrap" FontStyle="Italic" Text="Пояснение: это вычисленная ошибка между заданным положением трансбордера и вычисленным данным приложением"/>
                             <TextBlock Text="Установка нового значения - текущей позиции трансбордера (мм):" Margin="5"/>
-                            <TextBox Margin="5" Text="{Binding SetPosition}" FontWeight="Bold" FontSize="20" Background="Yellow"/>
-                            <Button Content="Записать" Margin="5"/>
+                            <Grid Margin="5">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="20" />
+                                </Grid.ColumnDefinitions>
+
+                                <TextBox Grid.Column="0" Text="{Binding SetPosition}" FontWeight="Bold" FontSize="20" Background="Yellow"></TextBox>
+                                <Grid Grid.Column="1">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition/>
+                                        <RowDefinition/>
+                                    </Grid.RowDefinitions>
+                                    <Button Grid.Row="0" FontSize="8" Cursor="Hand" 
+                                            DataContext="{Binding MainWindowViewModel, Source={StaticResource Locator}}"
+                                            Command="{Binding UpSetPositionCommand}">↑</Button>
+                                    <Button Grid.Row="1" FontSize="8" Cursor="Hand" 
+                                            DataContext="{Binding MainWindowViewModel, Source={StaticResource Locator}}"
+                                            Command="{Binding UpSetPositionCommand}">↓</Button>
+                                </Grid>
+                            </Grid>
+
+                            <TextBlock TextWrapping="Wrap" HorizontalAlignment="Center" Text="ВНИМАНИЕ! Опасно вводить новые данные при движении трансбордера в автоматическом режиме!" Foreground="Red" FontWeight="Bold" />
+                            <Button Content="Записать" Margin="5" Padding="10"/>
                         </StackPanel>
                         
                     </GroupBox>

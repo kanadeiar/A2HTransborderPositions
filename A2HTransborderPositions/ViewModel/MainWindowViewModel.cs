@@ -148,6 +148,27 @@ namespace A2HTransborderPositions.ViewModel
 
         }
 
+
+        private ICommand _UpSetPositionCommand;
+        /// <summary> Увеличить позицию задания на еденицу </summary>
+        public ICommand UpSetPositionCommand => _UpSetPositionCommand ??=
+            new LambdaCommand(OnUpSetPositionCommandExecuted, CanUpSetPositionCommandExecute);
+        private bool CanUpSetPositionCommandExecute(object p) => SelectPosition is { };
+        private void OnUpSetPositionCommandExecuted(object p)
+        {
+            SelectPosition.SetPosition += 1;
+        }
+
+        private ICommand _DownSetPositionCommand;
+        /// <summary> Увеличить позицию задания на еденицу </summary>
+        public ICommand DownSetPositionCommand => _DownSetPositionCommand ??=
+            new LambdaCommand(OnDownSetPositionCommandExecuted, CanDownSetPositionCommandExecute);
+        private bool CanDownSetPositionCommandExecute(object p) => SelectPosition is { };
+        private void OnDownSetPositionCommandExecuted(object p)
+        {
+            SelectPosition.SetPosition -= 1;
+        }
+
         #region Support
 
         private ICommand _CloseApplicationCommand;
