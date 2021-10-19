@@ -21,6 +21,7 @@ namespace A2HTransborderPositions.Services
             _client = new S7Client { ConnTimeout = 5_000, RecvTimeout = 5_000 };
             _bufferDb = new byte[455];
         }
+
         /// <summary> Тест соединения с контроллером </summary>
         public bool TestConnection(out int error)
         {
@@ -34,6 +35,7 @@ namespace A2HTransborderPositions.Services
             error = 0;
             return true;
         }
+
         /// <summary> Получение данных текущих позиций </summary>
         public bool GetCurrentPositions(out int error, int[] values)
         {
@@ -95,9 +97,12 @@ namespace A2HTransborderPositions.Services
             }
         }
 
-        public bool GetActualValues(out int error, out int position, out bool left, out bool right)
+        /// <summary> Получение текущих актуальных данных парома </summary>
+        /// <param name="error">Ошибка</param> <param name="position">Поцизия по энкодеру</param> <param name="number">Номер пути</param>
+        /// <param name="left">Фиксатор слева включен</param> <param name="right">Фиксатор справа включен</param> <returns>Данные успешно получены</returns>
+        public bool GetActualValues(out int error, out int position, out int number, out bool left, out bool right)
         {
-            position = 0;
+            position = number = 0;
             left = right = false;
             var r = _client.ConnectTo(_address, 0, 2);
             if (r != 0)
@@ -105,10 +110,11 @@ namespace A2HTransborderPositions.Services
                 error = r;
                 return false;
             }
-            byte[] buffer = new byte[16];
-            var r0 = _client.DBRead(60, 126, 16, buffer);
+            byte[] buffer = new byte[32];
+            var r0 = _client.DBRead(60, 126, 32, buffer);
             if (r0 != 0) throw new ApplicationException($"Ошибка получения данных.\nНе удалось прочитать данные с контроллера с адресом {_client.PLCIpAddress}, ошибка = {r}");
             position = buffer.GetDIntAt(4);
+            number = buffer.GetDIntAt(8);
             r0 = _client.ReadArea(S7Area.MK, 0, 1162, 1, S7WordLength.Byte, buffer);
             if (r0 != 0) throw new ApplicationException($"Ошибка получения данных.\nНе удалось прочитать данные с контроллера с адресом {_client.PLCIpAddress}, ошибка = {r}");
             left = (buffer[0] & 0b01) != 0; //фиксатор слева включен

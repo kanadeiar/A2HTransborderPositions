@@ -53,14 +53,10 @@ namespace A2HTransborderPositions.ViewModel
         #region Commands
 
         private ICommand _UpdateApplicationCommand;
-
-
         /// <summary> Обновить данные приложения </summary>
         public ICommand UpdateApplicationCommand => _UpdateApplicationCommand ??=
             new LambdaCommand(OnUpdateApplicationCommandExecuted, CanUpdateApplicationCommandExecute);
-
         private bool CanUpdateApplicationCommandExecute(object p) => true;
-
         private void OnUpdateApplicationCommandExecuted(object p)
         {
             var values = new int[32];
@@ -71,31 +67,23 @@ namespace A2HTransborderPositions.ViewModel
 
 
         private ICommand _RunApplicationCommand;
-
-
         /// <summary> Обновить данные приложения </summary>
         public ICommand RunApplicationCommand => _RunApplicationCommand ??=
             new LambdaCommand(OnRunApplicationCommandExecuted, CanRunApplicationCommandExecute);
-
         private bool CanRunApplicationCommandExecute(object p) => true;
-
         private void OnRunApplicationCommandExecuted(object p)
         {
-            _mixReaaderService.GetActualValues(out int error, out int pos, out bool left, out bool right);
-            MessageBox.Show($"Позиция трансбордера: {pos}, слева: {left}, справа: {right}");
+            _mixReaaderService.GetActualValues(out int error, out int pos, out int number, out bool left, out bool right);
+            MessageBox.Show($"Позиция трансбордера: {pos}, место: {number} слева: {left}, справа: {right}");
         }
 
         #region Support
 
         private ICommand _CloseApplicationCommand;
-
-
         /// <summary> Закрыть приложение </summary>
         public ICommand CloseApplicationCommand => _CloseApplicationCommand ??=
             new LambdaCommand(OnCloseApplicationCommandExecuted, CanCloseApplicationCommandExecute);
-
         private bool CanCloseApplicationCommandExecute(object p) => true;
-
         private void OnCloseApplicationCommandExecuted(object p)
         {
             Application.Current.Shutdown();

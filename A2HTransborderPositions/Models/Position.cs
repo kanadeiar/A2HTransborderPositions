@@ -10,6 +10,7 @@ namespace A2HTransborderPositions.Models
     public class Position : Entity
     {
         public string Name { get; set; }
+        public int Number { get; set; }
         public int Order { get; set; }
         public int CurrentPosition { get; set; }
         public int FactPosition { get; set; }

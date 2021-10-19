@@ -10,9 +10,13 @@ namespace A2HTransborderPositions.Interfaces
     {
         /// <summary> Тест соединения с контроллером </summary>
         public bool TestConnection(out int error);
+
         /// <summary> Получение данных текущих позиций </summary>
         public bool GetCurrentPositions(out int error, int[] values);
 
-        public bool GetActualValues(out int error, out int position, out bool left, out bool right);
+        /// <summary> Получение текущих актуальных данных парома </summary>
+        /// <param name="error">Ошибка</param> <param name="position">Поцизия по энкодеру</param> <param name="number">Номер пути</param>
+        /// <param name="left">Фиксатор слева включен</param> <param name="right">Фиксатор справа включен</param> <returns>Данные успешно получены</returns>
+        public bool GetActualValues(out int error, out int position, out int number, out bool left, out bool right);
     }
 }
