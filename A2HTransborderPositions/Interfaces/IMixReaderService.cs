@@ -15,8 +15,8 @@ namespace A2HTransborderPositions.Interfaces
         public bool GetCurrentPositions(out int error, int[] values);
 
         /// <summary> Получение текущих актуальных данных парома </summary>
-        /// <param name="error">Ошибка</param> <param name="position">Поцизия по энкодеру</param> <param name="number">Номер пути</param>
+        /// <param name="error">Ошибка</param> <param name="position">Поцизия по энкодеру</param> <param name="target">Номер Цель место</param>
         /// <param name="left">Фиксатор слева включен</param> <param name="right">Фиксатор справа включен</param> <returns>Данные успешно получены</returns>
-        public bool GetActualValues(out int error, out int position, out int number, out bool left, out bool right);
+        public bool GetActualValues(out int error, out int position, out int target, out int left, out int right);
     }
 }

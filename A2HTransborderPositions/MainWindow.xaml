@@ -5,12 +5,15 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:A2HTransborderPositions"
         mc:Ignorable="d"
-        Height="500" Width="800" WindowStartupLocation="CenterScreen" ResizeMode="CanResizeWithGrip" Background="LightGreen"
+        Height="700" Width="1000" WindowStartupLocation="CenterScreen" ResizeMode="CanResizeWithGrip" Background="LightGreen"
         Title="{Binding Title}"
         DataContext="{Binding MainWindowViewModel, Source={StaticResource Locator}}">
     <DockPanel>
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="Главное меню">
+                <MenuItem Header="Обновить текущие позиции трансбордера - данные из ПЛК" 
+                          Command="{Binding UpdateApplicationCommand}"/>
+                <Separator/>
                 <MenuItem Header="Выход" 
                           Command="{Binding CloseApplicationCommand}"/>
 
@@ -25,7 +28,7 @@
                 <TextBlock Text="Информация"/>
             </StatusBarItem>
         </StatusBar>
-        <TabControl>
+        <TabControl FontSize="14">
             <TabItem Header="Настройка трансбордера" Height="40">
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -39,46 +42,71 @@
                     <GroupBox Header="Управление" Grid.ColumnSpan="2" Grid.Row="0">
                         <StackPanel Orientation="Horizontal">
                             <Button Margin="2" Padding="10"
-                                    Command="{Binding UpdateApplicationCommand}">
-                                Обновить текущие позиции
+                                    Command="{Binding RunApplicationCommand}">
+                                Пуск Получать данные трансбордера
                             </Button>
                             <Button Margin="2" Padding="10"
-                                    Command="{Binding RunApplicationCommand}">
-                                Получать фактические позиции
+                                    Command="{Binding StopApplicationCommand}">
+                                Стоп
                             </Button>
                             <StackPanel Margin="5">
-                                <TextBlock>Текущая позиция:</TextBlock>
-                                <TextBlock FontWeight="Bold">0 мм</TextBlock>
+                                <TextBlock>Текущая позиция (мм):</TextBlock>
+                                <TextBlock FontWeight="Bold" Text="{Binding CurrentPosition}"/>
+                            </StackPanel>
+                            <StackPanel Margin="5">
+                                <TextBlock>Цель место:</TextBlock>
+                                <TextBlock FontWeight="Bold" Text="{Binding TargetPlace}"/>
                             </StackPanel>
                             <StackPanel Margin="5">
                                 <TextBlock>Центратор слева:</TextBlock>
-                                <TextBlock FontWeight="Bold">Открыт</TextBlock>
+                                <TextBlock FontWeight="Bold" Text="{Binding FixerLeftFixed}"/>
                             </StackPanel>
                             <StackPanel Margin="5">
                                 <TextBlock>Центратор справа:</TextBlock>
-                                <TextBlock FontWeight="Bold">Открыт</TextBlock>
+                                <TextBlock FontWeight="Bold" Text="{Binding FixerRightFixed}"/>
                             </StackPanel>
                         </StackPanel>
                     </GroupBox>
                     <GridSplitter Grid.Column="0" Grid.Row="1" Width="5" Background="Transparent"/>
                     <GroupBox Grid.Column="0" Grid.Row="1" Header="Позиции трансбордера" >
-                        <DataGrid AutoGenerateColumns="False" GridLinesVisibility="Vertical" SelectionMode="Single" IsReadOnly="True" AlternatingRowBackground="Aquamarine"
-                                  ItemsSource="{Binding Positions}">
+                        <DataGrid AutoGenerateColumns="False" GridLinesVisibility="Vertical" SelectionMode="Single" IsReadOnly="True" AlternatingRowBackground="Aquamarine" 
+                                  ItemsSource="{Binding Positions}"
+                                  SelectedItem="{Binding SelectPosition}">
                             <DataGrid.Columns>
                                 <DataGridTextColumn Header="Название" Binding="{Binding Name}" Width="150" />
-                                <DataGridTextColumn FontWeight="Bold" Header="Текущая" Binding="{Binding CurrentPosition}" />
-                                <DataGridTextColumn FontWeight="Bold" Header="Фактическое" Binding="{Binding FactPosition}" />
-                                <DataGridTextColumn FontWeight="Bold" Header="Установить" Binding="{Binding SetPosition}" />
+                                <DataGridTextColumn FontWeight="Bold" Header="Текущая (мм)" Binding="{Binding CurrentPosition}" />
+                                <DataGridTextColumn FontWeight="Bold" Header="По факту (мм)" Binding="{Binding FactPosition}" />
+                                <DataGridTextColumn FontWeight="Bold" Header="Ошибка (мм)" Binding="{Binding ErrorPosition}" />
                             </DataGrid.Columns>
                             
                         </DataGrid>
                     </GroupBox>
-                    <GroupBox Grid.Column="1" Grid.Row="1" Header="Параметры для выбранной позиции" >
+                    <GroupBox Grid.Column="1" Grid.Row="1" Header="Настройка параметров для выбранной позиции" 
+                              DataContext="{Binding SelectPosition}">
+                        <StackPanel>
+                            <TextBlock Text="Название позиции трансбордера:"/>
+                            <TextBlock FontWeight="Bold" Text="{Binding Name}"/>
+                            <TextBlock Text="Текущая позиция трансбордера (мм):"/>
+                            <TextBlock FontWeight="Bold" Text="{Binding CurrentPosition}"/>
+                            <TextBlock FontSize="12" TextWrapping="Wrap" FontStyle="Italic" Text="Пояснение: это данные из контроллера, уже находящиеся в нем, прочитанные этой программой с контроллера, заданная позиция трансбордера, на эту позицию едет трансбордер во время получения задания на движение"/>
+                            <TextBlock Text="По факту позиция трансбордера (мм):"/>
+                            <TextBlock FontWeight="Bold" Text="{Binding FactPosition}"/>
+                            <TextBlock FontSize="12" TextWrapping="Wrap" FontStyle="Italic" Text="Пояснение: это данные, измеренные этим приложением по показаниям энкодера, после центрирования трансбордера, когда трансбордер установился в позицию по центраторам"/>
+                            <TextBlock Text="Вычисленная ошибка (мм):"/>
+                            <TextBlock FontWeight="Bold" Text="{Binding ErrorPosition}"/>
+                            <TextBlock FontSize="12" TextWrapping="Wrap" FontStyle="Italic" Text="Пояснение: это вычисленная ошибка между заданным положением трансбордера и вычисленным данным приложением"/>
+                            <TextBlock Text="Установка нового значения - текущей позиции трансбордера (мм):" Margin="5"/>
+                            <TextBox Margin="5" Text="{Binding SetPosition}" FontWeight="Bold" FontSize="20" Background="Yellow"/>
+                            <Button Content="Записать" Margin="5"/>
+                        </StackPanel>
                         
                     </GroupBox>
                     
                     
                 </Grid>
+            </TabItem>
+            <TabItem Header="Журнал работы">
+                
             </TabItem>
         </TabControl>
 

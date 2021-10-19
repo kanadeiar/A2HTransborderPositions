@@ -11,5 +11,6 @@ namespace A2HTransborderPositions.Interfaces
     {
         public IEnumerable<Position> GetPositions();
         public void SetCurrentPositions(int[] values);
+        public void SetFactPosition(int target, int value);
     }
 }

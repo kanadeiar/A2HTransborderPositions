@@ -20,7 +20,7 @@ namespace A2HTransborderPositions
         {
             services.AddTransient<IRepositoryService, RepositoryService>();
 
-            services.AddTransient<IMixReaderService, Sharp7MixReaderService>();
+            services.AddScoped<IMixReaderService, Sharp7MixReaderService>();
 
             services.AddScoped<MainWindowViewModel>();
         }

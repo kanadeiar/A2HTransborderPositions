@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -56,7 +58,7 @@ namespace A2HTransborderPositions.Services
                 GetValueFromPLC(values, 108, 6);
                 GetValueFromPLC(values, 2210, 7);
                 GetValueFromPLC(values, 110, 8);
-                GetValueFromPLC(values, 2210, 9);
+                GetValueFromPLC(values, 2200, 9);
                 GetValueFromPLC(values, 112, 10);
                 GetValueFromPLC(values, 114, 11);
                 GetValueFromPLC(values, 115, 12);
@@ -92,33 +94,53 @@ namespace A2HTransborderPositions.Services
             void GetValueFromPLC(int[] values, int numbBlock, int ind)
             {
                 var r0 = _client.DBRead(numbBlock, 14, 4, _bufferDb);
-                if (r0 != 0) throw new ApplicationException($"Ошибка обновления данных внутреннего буфера.\nНе удалось прочитать блок данных  с контроллера с адресом {_client.PLCIpAddress}, ошибка = {r}");
+                if (r0 != 0) throw new ApplicationException($"Ошибка обновления данных внутреннего буфера.\nНе удалось прочитать блок данных  с контроллера с адресом {_client.PLCIpAddress}, ошибка = {r0}");
                 values[ind] = _bufferDb.GetIntAt(0);
             }
         }
 
         /// <summary> Получение текущих актуальных данных парома </summary>
-        /// <param name="error">Ошибка</param> <param name="position">Поцизия по энкодеру</param> <param name="number">Номер пути</param>
+        /// <param name="error">Ошибка</param> <param name="position">Поцизия по энкодеру</param> <param name="target">Номер цель место</param>
         /// <param name="left">Фиксатор слева включен</param> <param name="right">Фиксатор справа включен</param> <returns>Данные успешно получены</returns>
-        public bool GetActualValues(out int error, out int position, out int number, out bool left, out bool right)
+        public bool GetActualValues(out int error, out int position, out int target, out int left, out int right)
         {
-            position = number = 0;
-            left = right = false;
+            position = target = 0;
+            left = right = 0;
             var r = _client.ConnectTo(_address, 0, 2);
             if (r != 0)
             {
                 error = r;
                 return false;
             }
-            byte[] buffer = new byte[32];
-            var r0 = _client.DBRead(60, 126, 32, buffer);
-            if (r0 != 0) throw new ApplicationException($"Ошибка получения данных.\nНе удалось прочитать данные с контроллера с адресом {_client.PLCIpAddress}, ошибка = {r}");
-            position = buffer.GetDIntAt(4);
-            number = buffer.GetDIntAt(8);
+            byte[] buffer = new byte[4];
+            var r0 = _client.DBRead(60, 130, 4, buffer);
+            if (r0 != 0) throw new ApplicationException($"Ошибка получения данных.\nНе удалось прочитать данные с контроллера с адресом {_client.PLCIpAddress}, ошибка = {r0}");
+            position = buffer.GetDIntAt(0);
+
+            r0 = _client.DBRead(201, 100, 4, buffer);
+            if (r0 != 0) throw new ApplicationException($"Ошибка получения данных.\nНе удалось прочитать данные с контроллера с адресом {_client.PLCIpAddress}, ошибка = {r0}");
+            target = buffer.GetIntAt(0);
+
             r0 = _client.ReadArea(S7Area.MK, 0, 1162, 1, S7WordLength.Byte, buffer);
-            if (r0 != 0) throw new ApplicationException($"Ошибка получения данных.\nНе удалось прочитать данные с контроллера с адресом {_client.PLCIpAddress}, ошибка = {r}");
-            left = (buffer[0] & 0b01) != 0; //фиксатор слева включен
-            right = (buffer[0] & 0b00001) != 0; //фиксатор справа включен
+            if (r0 != 0) throw new ApplicationException($"Ошибка получения данных.\nНе удалось прочитать данные с контроллера с адресом {_client.PLCIpAddress}, ошибка = {r0}");
+            var bits = new BitArray(buffer);
+            var leftClose = bits[1];
+            var leftOpen = bits[2];
+            var rightClose = bits[4]; 
+            var rightOpen = bits[5]; 
+            
+            if (leftOpen)
+                left = 1;
+            else if (leftClose)
+                left = 2;
+            else
+                left = 0;
+            if (rightOpen)
+                right = 1;
+            else if (rightClose)
+                right = 2;
+            else
+                right = 0;
 
             error = 0;
             return true;
