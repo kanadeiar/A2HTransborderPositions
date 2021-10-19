@@ -47,7 +47,6 @@ namespace A2HTransborderPositions.Services
             var r = _client.ConnectTo(_address, 0, 2);
             if (r == 0)
             {
-                byte[] buffer = new byte[4];
                 #region Получение данных с контроллера
                 GetValueFromPLC(values, 2400, 0);
                 GetValueFromPLC(values, 102, 1);
@@ -56,9 +55,9 @@ namespace A2HTransborderPositions.Services
                 GetValueFromPLC(values, 105, 4);
                 GetValueFromPLC(values, 106, 5);
                 GetValueFromPLC(values, 108, 6);
-                GetValueFromPLC(values, 2210, 7);
+                GetValueFromPLC(values, 2200, 7);
                 GetValueFromPLC(values, 110, 8);
-                GetValueFromPLC(values, 2200, 9);
+                GetValueFromPLC(values, 2210, 9);
                 GetValueFromPLC(values, 112, 10);
                 GetValueFromPLC(values, 114, 11);
                 GetValueFromPLC(values, 115, 12);
@@ -99,9 +98,67 @@ namespace A2HTransborderPositions.Services
             }
         }
 
+        /// <summary> Запись значения в блок данных </summary>
+        public bool SetCurrentPosition(out int error, int index, int value)
+        {
+            var result = true;
+            error = 0;
+            var nvalue = Convert.ToInt16(value);
+            #region Получение адреса блока на основе индекса
+            var numbBlock = index switch
+            {
+                0 => 2400,
+                1 => 102,
+                2 => 103,
+                3 => 104,
+                4 => 105,
+                5 => 106,
+                6 => 108,
+                7 => 2200,
+                8 => 110,
+                9 => 2210,
+                10 => 112,
+                11 => 114,
+                12 => 115,
+                13 => 116,
+                14 => 2300,
+                15 => 118,
+                16 => 119,
+                17 => 120,
+                18 => 121,
+                19 => 122,
+                20 => 123,
+                21 => 124,
+                22 => 125,
+                23 => 126,
+                24 => 127,
+                25 => 128,
+                26 => 129,
+                27 => 130,
+                28 => 131,
+                29 => 132,
+                30 => 133,
+                31 => 134,
+                _ => throw new ArgumentException("Недопустимое значение индекса", nameof(index)),
+            };
+            #endregion
+            var r = _client.ConnectTo(_address, 0, 2);
+            if (r == 0)
+            {
+                _bufferDb.SetIntAt(0, nvalue);
+                var r0 = _client.DBWrite(134, 14, 2, _bufferDb);
+                if (r0 != 0) throw new ApplicationException($"Ошибка записи данных с внутреннего блока.\nНе удалось записать блок данных в контроллер с адресом {_client.PLCIpAddress}, ошибка = {r0}");
+            }
+            else
+            {
+                error = r;
+                result = false;
+            }
+            _client.Disconnect();
+            return result;
+        }
+
         /// <summary> Получение текущих актуальных данных парома </summary>
-        /// <param name="error">Ошибка</param> <param name="position">Поцизия по энкодеру</param> <param name="target">Номер цель место</param>
-        /// <param name="left">Фиксатор слева включен</param> <param name="right">Фиксатор справа включен</param> <returns>Данные успешно получены</returns>
         public bool GetActualValues(out int error, out int position, out int target, out int left, out int right)
         {
             position = target = 0;
@@ -126,8 +183,8 @@ namespace A2HTransborderPositions.Services
             var bits = new BitArray(buffer);
             var leftClose = bits[1];
             var leftOpen = bits[2];
-            var rightClose = bits[4]; 
-            var rightOpen = bits[5]; 
+            var rightClose = bits[4];
+            var rightOpen = bits[5];
             
             if (leftOpen)
                 left = 1;

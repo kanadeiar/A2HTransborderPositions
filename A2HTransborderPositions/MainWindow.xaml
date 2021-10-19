@@ -75,7 +75,7 @@
                     </GroupBox>
                     <GridSplitter Grid.Column="0" Grid.Row="1" Width="5" Background="Transparent"/>
                     <GroupBox Grid.Column="0" Grid.Row="1" Header="Позиции трансбордера" >
-                        <DataGrid AutoGenerateColumns="False" GridLinesVisibility="Vertical" SelectionMode="Single" IsReadOnly="True" AlternatingRowBackground="Aquamarine" 
+                        <DataGrid Name="DataGridPositions" AutoGenerateColumns="False" GridLinesVisibility="Vertical" SelectionMode="Single" IsReadOnly="True" AlternatingRowBackground="Aquamarine" 
                                   ItemsSource="{Binding Positions}"
                                   SelectedItem="{Binding SelectPosition}">
                             <DataGrid.Columns>
@@ -124,7 +124,10 @@
                             </Grid>
 
                             <TextBlock TextWrapping="Wrap" HorizontalAlignment="Center" Text="ВНИМАНИЕ! Опасно вводить новые данные при движении трансбордера в автоматическом режиме!" Foreground="Red" FontWeight="Bold" />
-                            <Button Content="Записать" Margin="5" Padding="10"/>
+                            <Button Content="Записать значение в ПЛК" Margin="5" Padding="10" 
+                                    Command="{Binding DataContext.WriteValueToControllerCommand, ElementName=DataGridPositions}"
+                                    CommandParameter="{Binding}"/>
+
                         </StackPanel>
                         
                     </GroupBox>

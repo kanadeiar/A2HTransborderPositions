@@ -17,15 +17,15 @@ namespace A2HTransborderPositions.ViewModel
 {
     class MainWindowViewModel : Base.ViewModel
     {
-        #region Data
+        #region Данные
 
         private readonly IRepositoryService _repositoryService;
-        private readonly IMixReaderService _mixReaaderService;
+        private readonly IMixReaderService _mixReaderService;
         private Timer _timer;
 
-        #endregion Data
+        #endregion Данные
 
-        #region Properties
+        #region Свойства
 
         public ObservableCollection<Position> Positions { get; } = new ();
 
@@ -36,7 +36,6 @@ namespace A2HTransborderPositions.ViewModel
             get => _selectPosition;
             set => Set( ref _selectPosition, value );
         }
-
 
         private int _currentPosition;
         /// <summary> Текущая позиция трансбордера </summary>
@@ -70,7 +69,7 @@ namespace A2HTransborderPositions.ViewModel
             set => Set(ref _fixerRightFixed, value);
         }
 
-        #region Support
+        #region Поддержка
 
         private string _Title = "A2H Утилита настройки позиций трансбордера";
         /// <summary> Заголовок приложения </summary>
@@ -80,14 +79,14 @@ namespace A2HTransborderPositions.ViewModel
             set => Set(ref _Title, value);
         }
 
-        #endregion Support
+        #endregion Поддержка
 
-        #endregion Properties
+        #endregion Свойства
 
         public MainWindowViewModel(IRepositoryService repositoryService, IMixReaderService mixReaaderService)
         {
             _repositoryService = repositoryService;
-            _mixReaaderService = mixReaaderService;
+            _mixReaderService = mixReaaderService;
 
             LoadData();
 
@@ -95,7 +94,7 @@ namespace A2HTransborderPositions.ViewModel
             _timer.Elapsed += _timer_Elapsed;
         }
 
-        #region Commands
+        #region Команды
 
         private ICommand _UpdateApplicationCommand;
         /// <summary> Обновить позиции трансбордера </summary>
@@ -111,7 +110,7 @@ namespace A2HTransborderPositions.ViewModel
                 await Task.Run(() =>
                 {
                     var values = new int[32];
-                    _mixReaaderService.GetCurrentPositions(out int error, values);
+                    _mixReaderService.GetCurrentPositions(out int error, values);
                     _repositoryService.SetCurrentPositions(values);
                     asyncExecuteUpdateApplicationCommand = false;
                 });
@@ -124,7 +123,6 @@ namespace A2HTransborderPositions.ViewModel
             }
         }
 
-
         private ICommand _RunApplicationCommand;
         /// <summary> Начать получать актуальные данные трансбордера </summary>
         public ICommand RunApplicationCommand => _RunApplicationCommand ??=
@@ -132,9 +130,7 @@ namespace A2HTransborderPositions.ViewModel
         private bool CanRunApplicationCommandExecute(object p) => true;
         private void OnRunApplicationCommandExecuted(object p)
         { 
-            //MessageBox.Show($"Позиция трансбордера: {pos}, цель место: {target} слева: {left}, справа: {right}");
             _timer.Start();
-
         }
 
         private ICommand _StopApplicationCommand;
@@ -145,7 +141,6 @@ namespace A2HTransborderPositions.ViewModel
         private void OnStopApplicationCommandExecuted(object p)
         {
             _timer.Stop();
-
         }
 
 
@@ -169,7 +164,17 @@ namespace A2HTransborderPositions.ViewModel
             SelectPosition.SetPosition -= 1;
         }
 
-        #region Support
+        private ICommand _WriteValueToControllerCommand;
+        /// <summary> Записать значение в контроллер </summary>
+        public ICommand WriteValueToControllerCommand => _WriteValueToControllerCommand ??=
+            new LambdaCommand(OnWriteValueToControllerCommandExecuted, CanWriteValueToControllerCommandExecute);
+        private bool CanWriteValueToControllerCommandExecute(object p) => p is { };
+        private void OnWriteValueToControllerCommandExecuted(object p)
+        {
+            _mixReaderService.SetCurrentPosition(out int error, 31, 30000);
+        }
+
+        #region Поддержка
 
         private ICommand _CloseApplicationCommand;
         /// <summary> Закрыть приложение </summary>
@@ -181,9 +186,9 @@ namespace A2HTransborderPositions.ViewModel
             Application.Current.Shutdown();
         }
 
-        #endregion Support
+        #endregion Поддержка
 
-        #endregion Commands
+        #endregion Команды
 
         #region Вспомогательные методы
 
@@ -198,13 +203,13 @@ namespace A2HTransborderPositions.ViewModel
 
             try
             {
-                var dataGetted = _mixReaaderService.GetActualValues(out int error, out int pos, out int target, out int left, out int right);
+                var dataGetted = _mixReaderService.GetActualValues(out int error, out int pos, out int target, out int left, out int right);
                 if (dataGetted)
                 {
                     CurrentPosition = pos;
                     if (target != 0)
                     {
-                        TargetPlace = _repositoryService.GetPositions().SingleOrDefault(p => p.Target == target).Name;
+                        TargetPlace = _repositoryService.GetPositions().SingleOrDefault(p => p.Target == target)?.Name ?? "Отдых";
                     }
                     else
                     {
@@ -234,7 +239,6 @@ namespace A2HTransborderPositions.ViewModel
                         if ((left == 2 && oldLeft == 0 && right == 2) || (right == 2 && oldRight == 0 && left == 2))
                         {
                             fixTarget = target;
-                            //_repositoryService.SetFactPosition(target, pos);
                         }
                         if (left == 2 && right == 2 && fixTarget == target)
                         {
@@ -249,7 +253,7 @@ namespace A2HTransborderPositions.ViewModel
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Ошибка чтения контроллера заливки");
+                MessageBox.Show($"Ошибка чтения контроллера заливки, ошибка: {ex.Message}");
                 throw;
             }
 
