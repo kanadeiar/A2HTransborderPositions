@@ -107,8 +107,12 @@ namespace A2HTransborderPositions.Services
             }
             byte[] buffer = new byte[16];
             var r0 = _client.DBRead(60, 126, 16, buffer);
-            if (r0 != 0) throw new ApplicationException($"Ошибка обновления данных внутреннего буфера.\nНе удалось прочитать блок данных  с контроллера с адресом {_client.PLCIpAddress}, ошибка = {r}");
+            if (r0 != 0) throw new ApplicationException($"Ошибка получения данных.\nНе удалось прочитать данные с контроллера с адресом {_client.PLCIpAddress}, ошибка = {r}");
             position = buffer.GetDIntAt(4);
+            r0 = _client.ReadArea(S7Area.MK, 0, 1162, 1, S7WordLength.Byte, buffer);
+            if (r0 != 0) throw new ApplicationException($"Ошибка получения данных.\nНе удалось прочитать данные с контроллера с адресом {_client.PLCIpAddress}, ошибка = {r}");
+            left = (buffer[0] & 0b01) != 0; //фиксатор слева включен
+            right = (buffer[0] & 0b00001) != 0; //фиксатор справа включен
 
             error = 0;
             return true;

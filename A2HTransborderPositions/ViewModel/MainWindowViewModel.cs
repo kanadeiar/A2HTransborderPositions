@@ -82,6 +82,7 @@ namespace A2HTransborderPositions.ViewModel
         private void OnRunApplicationCommandExecuted(object p)
         {
             _mixReaaderService.GetActualValues(out int error, out int pos, out bool left, out bool right);
+            MessageBox.Show($"Позиция трансбордера: {pos}, слева: {left}, справа: {right}");
         }
 
         #region Support
