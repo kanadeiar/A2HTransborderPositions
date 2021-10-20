@@ -190,6 +190,9 @@ namespace A2HTransborderPositions.ViewModel
         private void OnWriteValueToControllerCommandExecuted(object p)
         {
             if (SelectPosition is null) return;
+            if (MessageBox.Show("Действительно записать это значение в программируемый логический контроллер?", "Подтверждение",
+                MessageBoxButton.YesNo, MessageBoxImage.Exclamation) == MessageBoxResult.No)
+                return;
             _mixReaderService.SetCurrentPosition(out int error, Positions.IndexOf(SelectPosition), SelectPosition.SetPosition);
         }
 
