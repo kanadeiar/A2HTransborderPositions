@@ -19,6 +19,7 @@ namespace A2HTransborderPositions
         private static void InitializeServices(IServiceCollection services)
         {
             services.AddTransient<IRepositoryService, RepositoryService>();
+            services.AddTransient<IJournalPositionsService, JournalPositionsService>();
 
             services.AddScoped<IMixReaderService, Sharp7MixReaderService>();
 

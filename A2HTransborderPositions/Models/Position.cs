@@ -18,6 +18,7 @@ namespace A2HTransborderPositions.Models
             get => _name; 
             set => Set(ref _name, value ); 
         }
+
         private int _target;
         /// <summary> Номер цель аппаратный </summary>
         public int Target 
@@ -25,6 +26,7 @@ namespace A2HTransborderPositions.Models
             get => _target; 
             set => Set(ref _target, value ); 
         }
+
         private int _order;
         /// <summary> Сортировка </summary>
         public int Order 
@@ -32,6 +34,7 @@ namespace A2HTransborderPositions.Models
             get => _order; 
             set => Set(ref _order, value ); 
         }
+
         private int _currentPosition;
         /// <summary> Текущая позиция в контроллере </summary>
         public int CurrentPosition
@@ -43,6 +46,7 @@ namespace A2HTransborderPositions.Models
                 OnPropertyChanged(nameof(ErrorPosition));
             }
         }
+
         private int _factPosition;
         /// <summary> Позиция по факту </summary>
         public int FactPosition
@@ -54,6 +58,7 @@ namespace A2HTransborderPositions.Models
                 OnPropertyChanged(nameof(ErrorPosition));
             }
         }
+
         private int _setPosition;
         /// <summary> Установка позиции </summary>
         public int SetPosition 
@@ -61,6 +66,7 @@ namespace A2HTransborderPositions.Models
             get => _setPosition; 
             set => Set(ref _setPosition, value ); 
         }
+
         /// <summary> Ошибка позиционирования </summary>
         public int ErrorPosition
         {

@@ -21,12 +21,14 @@ namespace A2HTransborderPositions.ViewModel
 
         private readonly IRepositoryService _repositoryService;
         private readonly IMixReaderService _mixReaderService;
+        private readonly IJournalPositionsService _journalPositionsService;
         private Timer _timer;
 
         #endregion Данные
 
         #region Свойства
 
+        /// <summary> Позиции трансбордера </summary>
         public ObservableCollection<Position> Positions { get; } = new ();
 
         private Position _selectPosition;
@@ -78,6 +80,12 @@ namespace A2HTransborderPositions.ViewModel
             set => Set(ref _fixerRightFixed, value);
         }
 
+        /// <summary> Журналы передвижений трансбордера </summary>
+        public IEnumerable<Journal> Journals => _journalPositionsService.GetJournals();
+
+        /// <summary> Журнылы передвижений отфильтрованный для выбранной позиции </summary>
+        public IEnumerable<Journal> SelectPositionJournals => _journalPositionsService.GetJournals().Where(j => j.Position == SelectPosition.Name);
+
         #region Поддержка
 
         private string _Title = "A2H Утилита настройки позиций трансбордера";
@@ -92,15 +100,16 @@ namespace A2HTransborderPositions.ViewModel
 
         #endregion Свойства
 
-        public MainWindowViewModel(IRepositoryService repositoryService, IMixReaderService mixReaaderService)
+        public MainWindowViewModel(IRepositoryService repositoryService, IMixReaderService mixReaaderService, IJournalPositionsService journalPositionsService)
         {
             _repositoryService = repositoryService;
             _mixReaderService = mixReaaderService;
-
+            _journalPositionsService = journalPositionsService;
             LoadData();
 
             _timer = new Timer(200);
             _timer.Elapsed += _timer_Elapsed;
+
         }
 
         #region Команды
@@ -184,6 +193,26 @@ namespace A2HTransborderPositions.ViewModel
             _mixReaderService.SetCurrentPosition(out int error, Positions.IndexOf(SelectPosition), SelectPosition.SetPosition);
         }
 
+        private ICommand _UpdateJournalCommand;
+        /// <summary> Обновить журнал движений трансбордера </summary>
+        public ICommand UpdateJournalCommand => _UpdateJournalCommand ??=
+            new LambdaCommand(OnUpdateJournalCommandExecuted, CanUpdateJournalCommandExecute);
+        private bool CanUpdateJournalCommandExecute(object p) => true;
+        private void OnUpdateJournalCommandExecuted(object p)
+        {
+            OnPropertyChanged(nameof(Journals));
+        }
+
+        private ICommand _UpdateSelectJournalCommand;
+        /// <summary> Обновить журнал движений трансбордера </summary>
+        public ICommand UpdateSelectJournalCommand => _UpdateSelectJournalCommand ??=
+            new LambdaCommand(OnUpdateSelectJournalCommandExecuted, CanUpdateSelectJournalCommandExecute);
+        private bool CanUpdateSelectJournalCommandExecute(object p) => true;
+        private void OnUpdateSelectJournalCommandExecuted(object p)
+        {
+            OnPropertyChanged(nameof(SelectPositionJournals));
+        }
+
         #region Поддержка
 
         private ICommand _CloseApplicationCommand;
@@ -207,6 +236,7 @@ namespace A2HTransborderPositions.ViewModel
         private int oldLeft = -1;
         private int oldRight = -1;
         private int fixTarget = -1;
+        private Journal fixJournal = null;
         private void _timer_Elapsed(object sender, ElapsedEventArgs e)
         {
             _timer.Enabled = false;
@@ -242,6 +272,16 @@ namespace A2HTransborderPositions.ViewModel
                         if ( (left == 2 && oldLeft == 0 && right == 2) || (right == 2 && oldRight == 0 && left == 2))
                         {
                             _repositoryService.SetFactPosition(target, oldPos);
+
+                            _journalPositionsService.AddToJournal(DateTime.Now, TargetPlace, _repositoryService.GetPositions().SingleOrDefault(p => p.Target == target)?.CurrentPosition ?? 0, oldPos);
+
+                            //Journals.Add(new Journal
+                            //{
+                            //    DateTime = DateTime.Now,
+                            //    Position = TargetPlace,
+                            //    TargetPosition = _repositoryService.GetPositions().SingleOrDefault(p => p.Target == target)?.CurrentPosition ?? 0,
+                            //    FactPosition = oldPos,
+                            //});
                         }
                     }
                     else if (target != 0)
@@ -249,10 +289,22 @@ namespace A2HTransborderPositions.ViewModel
                         if ((left == 2 && oldLeft == 0 && right == 2) || (right == 2 && oldRight == 0 && left == 2))
                         {
                             fixTarget = target;
+
+                            _journalPositionsService.AddToJournal(DateTime.Now, TargetPlace, _repositoryService.GetPositions().SingleOrDefault(p => p.Target == target)?.CurrentPosition ?? 0, pos);
+
+                            //Journals.Add(new Journal
+                            //{
+                            //    DateTime = DateTime.Now,
+                            //    Position = TargetPlace,
+                            //    TargetPosition = _repositoryService.GetPositions().SingleOrDefault(p => p.Target == target)?.CurrentPosition ?? 0,
+                            //    FactPosition = pos,
+                            //});
                         }
                         if (left == 2 && right == 2 && fixTarget == target)
                         {
                             _repositoryService.SetFactPosition(target, pos);
+
+                            //Journals.LastOrDefault().FactPosition = pos;
                         }
                     }
 
@@ -264,7 +316,6 @@ namespace A2HTransborderPositions.ViewModel
             catch (Exception ex)
             {
                 MessageBox.Show($"Ошибка чтения контроллера заливки, ошибка: {ex.Message}");
-                throw;
             }
 
             _timer.Enabled = true;

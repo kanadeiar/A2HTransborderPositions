@@ -109,8 +109,8 @@ namespace A2HTransborderPositions.Services
             {
                 _bufferDb.SetDIntAt(0, value);
                 Debug.WriteLine($"Номер блока {numbBlock}, значение в буфере: {value}");
-                //var r0 = _client.DBWrite(numbBlock, 12, 2, _bufferDb);
-                //if (r0 != 0) throw new ApplicationException($"Ошибка записи данных с внутреннего блока.\nНе удалось записать блок данных в контроллер с адресом {_client.PLCIpAddress}, ошибка = {r0}");
+                var r0 = _client.DBWrite(numbBlock, 12, 4, _bufferDb);
+                if (r0 != 0) throw new ApplicationException($"Ошибка записи данных с внутреннего блока.\nНе удалось записать блок данных в контроллер с адресом {_client.PLCIpAddress}, ошибка = {r0}");
             }
             else
             {
