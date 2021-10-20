@@ -55,9 +55,9 @@ namespace A2HTransborderPositions.Services
                 GetValueFromPLC(values, 105, 4);
                 GetValueFromPLC(values, 106, 5);
                 GetValueFromPLC(values, 108, 6);
-                GetValueFromPLC(values, 2200, 7);
+                GetValueFromPLC(values, 2210, 7);
                 GetValueFromPLC(values, 110, 8);
-                GetValueFromPLC(values, 2210, 9);
+                GetValueFromPLC(values, 2200, 9);
                 GetValueFromPLC(values, 112, 10);
                 GetValueFromPLC(values, 114, 11);
                 GetValueFromPLC(values, 115, 12);
@@ -92,9 +92,9 @@ namespace A2HTransborderPositions.Services
 
             void GetValueFromPLC(int[] values, int numbBlock, int ind)
             {
-                var r0 = _client.DBRead(numbBlock, 14, 4, _bufferDb);
+                var r0 = _client.DBRead(numbBlock, 12, 4, _bufferDb);
                 if (r0 != 0) throw new ApplicationException($"Ошибка обновления данных внутреннего буфера.\nНе удалось прочитать блок данных  с контроллера с адресом {_client.PLCIpAddress}, ошибка = {r0}");
-                values[ind] = _bufferDb.GetIntAt(0);
+                values[ind] = _bufferDb.GetDIntAt(0);
             }
         }
 
@@ -103,51 +103,14 @@ namespace A2HTransborderPositions.Services
         {
             var result = true;
             error = 0;
-            var nvalue = Convert.ToInt16(value);
-            #region Получение адреса блока на основе индекса
-            var numbBlock = index switch
-            {
-                0 => 2400,
-                1 => 102,
-                2 => 103,
-                3 => 104,
-                4 => 105,
-                5 => 106,
-                6 => 108,
-                7 => 2200,
-                8 => 110,
-                9 => 2210,
-                10 => 112,
-                11 => 114,
-                12 => 115,
-                13 => 116,
-                14 => 2300,
-                15 => 118,
-                16 => 119,
-                17 => 120,
-                18 => 121,
-                19 => 122,
-                20 => 123,
-                21 => 124,
-                22 => 125,
-                23 => 126,
-                24 => 127,
-                25 => 128,
-                26 => 129,
-                27 => 130,
-                28 => 131,
-                29 => 132,
-                30 => 133,
-                31 => 134,
-                _ => throw new ArgumentException("Недопустимое значение индекса", nameof(index)),
-            };
-            #endregion
+            var numbBlock = GetNumberBlockFromIndex(index);
             var r = _client.ConnectTo(_address, 0, 2);
             if (r == 0)
             {
-                _bufferDb.SetIntAt(0, nvalue);
-                var r0 = _client.DBWrite(134, 14, 2, _bufferDb);
-                if (r0 != 0) throw new ApplicationException($"Ошибка записи данных с внутреннего блока.\nНе удалось записать блок данных в контроллер с адресом {_client.PLCIpAddress}, ошибка = {r0}");
+                _bufferDb.SetDIntAt(0, value);
+                Debug.WriteLine($"Номер блока {numbBlock}, значение в буфере: {value}");
+                //var r0 = _client.DBWrite(numbBlock, 12, 2, _bufferDb);
+                //if (r0 != 0) throw new ApplicationException($"Ошибка записи данных с внутреннего блока.\nНе удалось записать блок данных в контроллер с адресом {_client.PLCIpAddress}, ошибка = {r0}");
             }
             else
             {
@@ -185,7 +148,7 @@ namespace A2HTransborderPositions.Services
             var leftOpen = bits[2];
             var rightClose = bits[4];
             var rightOpen = bits[5];
-            
+
             if (leftOpen)
                 left = 1;
             else if (leftClose)
@@ -202,5 +165,51 @@ namespace A2HTransborderPositions.Services
             error = 0;
             return true;
         }
+
+        #region Вспомогательное
+
+        /// <summary> Получение номера блока данных по индексу массива с данными позиций трансбордера </summary>
+        public static int GetNumberBlockFromIndex(int index)
+        {
+            var numbBlock = index switch
+            {
+                0 => 2400,
+                1 => 102,
+                2 => 103,
+                3 => 104,
+                4 => 105,
+                5 => 106,
+                6 => 108,
+                7 => 2210,
+                8 => 110,
+                9 => 2200,
+                10 => 112,
+                11 => 114,
+                12 => 115,
+                13 => 116,
+                14 => 2300,
+                15 => 118,
+                16 => 119,
+                17 => 120,
+                18 => 121,
+                19 => 122,
+                20 => 123,
+                21 => 124,
+                22 => 125,
+                23 => 126,
+                24 => 127,
+                25 => 128,
+                26 => 129,
+                27 => 130,
+                28 => 131,
+                29 => 132,
+                30 => 133,
+                31 => 134,
+                _ => 0,
+            };
+            return numbBlock;
+        }
+
+        #endregion Вспомогательное
     }
 }

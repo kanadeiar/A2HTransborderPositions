@@ -1,4 +1,5 @@
 ﻿using A2HTransborderPositions.Models.Base;
+using A2HTransborderPositions.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -65,5 +66,6 @@ namespace A2HTransborderPositions.Models
         {
             get => (CurrentPosition != 0 && FactPosition != 0) ? CurrentPosition - FactPosition : 0;
         }
+
     }
 }

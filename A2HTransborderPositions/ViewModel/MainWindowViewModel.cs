@@ -34,7 +34,16 @@ namespace A2HTransborderPositions.ViewModel
         public Position SelectPosition
         {
             get => _selectPosition;
-            set => Set( ref _selectPosition, value );
+            set
+            {
+                Set(ref _selectPosition, value);
+                OnPropertyChanged(nameof(AddressOfDataBlock));
+            }
+        }
+        /// <summary> Адрес блока данных </summary>
+        public string AddressOfDataBlock
+        {
+            get => $"DB{Sharp7MixReaderService.GetNumberBlockFromIndex(Positions.IndexOf(SelectPosition))}.DBD12";
         }
 
         private int _currentPosition;
@@ -171,7 +180,8 @@ namespace A2HTransborderPositions.ViewModel
         private bool CanWriteValueToControllerCommandExecute(object p) => p is { };
         private void OnWriteValueToControllerCommandExecuted(object p)
         {
-            _mixReaderService.SetCurrentPosition(out int error, 31, 30000);
+            if (SelectPosition is null) return;
+            _mixReaderService.SetCurrentPosition(out int error, Positions.IndexOf(SelectPosition), SelectPosition.SetPosition);
         }
 
         #region Поддержка
