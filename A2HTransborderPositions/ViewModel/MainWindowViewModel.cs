@@ -40,6 +40,7 @@ namespace A2HTransborderPositions.ViewModel
             {
                 Set(ref _selectPosition, value);
                 OnPropertyChanged(nameof(AddressOfDataBlock));
+                OnPropertyChanged(nameof(SelectPositionJournals));
             }
         }
         /// <summary> Адрес блока данных </summary>
