@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TrancborderTimeCalc"
         mc:Ignorable="d"
-        Height="600" Width="1000" WindowStartupLocation="CenterScreen" ResizeMode="CanResizeWithGrip" Background="LightGreen"
+        Height="600" Width="1300" WindowStartupLocation="CenterScreen" ResizeMode="CanResizeWithGrip" Background="LightGreen"
         Title="{Binding Title}"
         DataContext="{Binding MainWindowViewModel, Source={StaticResource Locator}}">
     <DockPanel>
@@ -32,7 +32,83 @@
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
                     <GroupBox Header="Расстановка массивов" Grid.Column="0" Margin="0,0,5,0">
-                        
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="250"/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            <DataGrid Grid.RowSpan="2" Name="DataGridPositions" AutoGenerateColumns="False" GridLinesVisibility="Vertical" SelectionMode="Single" IsReadOnly="True" AlternatingRowBackground="Aquamarine"
+                                      ItemsSource="{Binding Positions}"
+                                      SelectedItem="{Binding SelectPosition}">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="Название" Binding="{Binding Name}" Width="160" />
+                                    <DataGridTextColumn Header="Массив" Binding="{Binding Massif}" Width="60" />
+                                </DataGrid.Columns>
+                            </DataGrid>
+                            <GroupBox DataContext="{Binding SelectPosition}" Grid.Column="1" Grid.Row="0" Header="Данные по выбранному">                                
+                                <StackPanel>                                    
+                                    <TextBlock VerticalAlignment="Center" Text="Номер массива:" Margin="5,5,5,0" />
+                                    <Grid Margin="5, 0, 5, 0">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="20" />
+                                        </Grid.ColumnDefinitions>
+                                        <TextBox Grid.Column="0" Text="{Binding Massif}" FontWeight="Bold" FontSize="20" Background="GreenYellow"></TextBox>
+                                        <Grid Grid.Column="1">
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition/>
+                                                <RowDefinition/>
+                                            </Grid.RowDefinitions>
+                                            <Button Grid.Row="0" FontSize="8" Cursor="Hand" 
+                                                DataContext="{Binding MainWindowViewModel, Source={StaticResource Locator}}"
+                                                Command="{Binding UpMassifCommand}">↑</Button>
+                                            <Button Grid.Row="1" FontSize="8" Cursor="Hand" 
+                                                DataContext="{Binding MainWindowViewModel, Source={StaticResource Locator}}"
+                                                Command="{Binding DownMassifCommand}">↓</Button>
+                                        </Grid>
+                                    </Grid>
+                                </StackPanel>
+                            </GroupBox>
+                            <Canvas Grid.Column="1" Grid.Row="1">
+                                <TextBlock Text="406-е Прием" Width="150" Canvas.Left="210" Canvas.Top="20" Background="GreenYellow"/>
+                                <TextBlock Text="2-е" Width="150" Canvas.Left="10" Canvas.Top="20" Background="LightYellow"/>
+                                <TextBlock Text="3-е" Width="150" Canvas.Left="210" Canvas.Top="40" Background="LightYellow"/>
+                                <TextBlock Text="4-е" Width="150" Canvas.Left="10" Canvas.Top="40" Background="LightYellow"/>
+                                <TextBlock Text="5-е" Width="150" Canvas.Left="210" Canvas.Top="60" Background="LightYellow"/>
+                                <TextBlock Text="6-е" Width="150" Canvas.Left="10" Canvas.Top="60" Background="LightYellow"/>
+                                <TextBlock Text="8-е" Width="150" Canvas.Left="10" Canvas.Top="80" Background="LightYellow"/>
+                                <TextBlock Text="2-й ударный" Width="150" Canvas.Left="210" Canvas.Top="100" Background="LightBlue"/>
+                                <TextBlock Text="10-е" Width="150" Canvas.Left="10" Canvas.Top="100" Background="LightYellow"/>
+                                <TextBlock Text="1-й ударный" Width="150" Canvas.Left="210" Canvas.Top="120" Background="LightBlue"/>
+                                <TextBlock Text="12-е" Width="150" Canvas.Left="10" Canvas.Top="120" Background="LightYellow"/>
+                                <TextBlock Text="14-е" Width="150" Canvas.Left="10" Canvas.Top="140" Background="LightYellow"/>
+                                <TextBlock Text="15-е" Width="150" Canvas.Left="210" Canvas.Top="160" Background="LightYellow"/>
+                                <TextBlock Text="16-е" Width="150" Canvas.Left="10" Canvas.Top="160" Background="LightYellow"/>
+                                <TextBlock Text="301-е Выдача" Width="150" Canvas.Left="210" Canvas.Top="180" Background="LightGray"/>
+                                <TextBlock Text="18-е" Width="150" Canvas.Left="10" Canvas.Top="180" Background="LightYellow"/>
+                                <TextBlock Text="19-е" Width="150" Canvas.Left="210" Canvas.Top="200" Background="LightYellow"/>
+                                <TextBlock Text="20-е" Width="150" Canvas.Left="10" Canvas.Top="200" Background="LightYellow"/>
+                                <TextBlock Text="21-е" Width="150" Canvas.Left="210" Canvas.Top="220" Background="LightYellow"/>
+                                <TextBlock Text="22-е" Width="150" Canvas.Left="10" Canvas.Top="220" Background="LightYellow"/>
+                                <TextBlock Text="23-е" Width="150" Canvas.Left="210" Canvas.Top="240" Background="LightYellow"/>
+                                <TextBlock Text="24-е" Width="150" Canvas.Left="10" Canvas.Top="240" Background="LightYellow"/>
+                                <TextBlock Text="25-е" Width="150" Canvas.Left="210" Canvas.Top="260" Background="LightYellow"/>
+                                <TextBlock Text="26-е" Width="150" Canvas.Left="10" Canvas.Top="260" Background="LightYellow"/>
+                                <TextBlock Text="27-е" Width="150" Canvas.Left="210" Canvas.Top="280" Background="LightYellow"/>
+                                <TextBlock Text="28-е" Width="150" Canvas.Left="10" Canvas.Top="280" Background="LightYellow"/>
+                                <TextBlock Text="29-е" Width="150" Canvas.Left="210" Canvas.Top="300" Background="LightYellow"/>
+                                <TextBlock Text="30-е" Width="150" Canvas.Left="10" Canvas.Top="300" Background="LightYellow"/>
+                                <TextBlock Text="31-е" Width="150" Canvas.Left="210" Canvas.Top="320" Background="LightYellow"/>
+                                <TextBlock Text="32-е" Width="150" Canvas.Left="10" Canvas.Top="320" Background="LightYellow"/>
+                                <TextBlock Text="33-е" Width="150" Canvas.Left="210" Canvas.Top="340" Background="LightYellow"/>
+                                <TextBlock Text="34-е" Width="150" Canvas.Left="10" Canvas.Top="340" Background="LightYellow"/>
+                            </Canvas>
+                            
+                        </Grid>                        
                     </GroupBox>
                     <GridSplitter Grid.Column="0" Width="5" Background="Transparent" />
                     <GroupBox Header="Порядок работы камеры" Grid.Column="1">

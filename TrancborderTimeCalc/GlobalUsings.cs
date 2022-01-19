@@ -11,3 +11,5 @@ global using System.Windows.Input;
 global using TrancborderTimeCalc.Model;
 global using TrancborderTimeCalc.Model.Base;
 global using TrancborderTimeCalc.ViewModel;
+global using TrancborderTimeCalc.Services;
+
