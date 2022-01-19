@@ -42,6 +42,12 @@
                 </Grid>
                 
             </TabItem>
+            <TabItem Header="Характеристики" Height="40">
+                <GroupBox Header="Характеристики работы трансбордера в камере созревания">
+                    
+                </GroupBox>
+                
+            </TabItem>
             <TabItem Header="Результаты" Height="40">
                 <GroupBox Header="Результаты моделирования работы камеры созревания">
                     

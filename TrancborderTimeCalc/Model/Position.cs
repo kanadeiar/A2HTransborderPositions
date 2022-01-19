@@ -1,5 +1,6 @@
 ﻿namespace TrancborderTimeCalc.Model;
 
+/// <summary> Позиция </summary>
 public class Position : Entity
 {
     private string _Name;
