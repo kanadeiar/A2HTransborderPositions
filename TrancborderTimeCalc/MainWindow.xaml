@@ -26,9 +26,26 @@
         </StatusBar>
         <TabControl FontSize="14">
             <TabItem Header="Расстановка массивов и порядок работы" Height="40">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <GroupBox Header="Расстановка массивов" Grid.Column="0" Margin="0,0,5,0">
+                        
+                    </GroupBox>
+                    <GridSplitter Grid.Column="0" Width="5" Background="Transparent" />
+                    <GroupBox Header="Порядок работы камеры" Grid.Column="1">
+                        
+                    </GroupBox>
+                    
+                </Grid>
                 
             </TabItem>
             <TabItem Header="Результаты" Height="40">
+                <GroupBox Header="Результаты моделирования работы камеры созревания">
+                    
+                </GroupBox>
 
             </TabItem>
         </TabControl>
