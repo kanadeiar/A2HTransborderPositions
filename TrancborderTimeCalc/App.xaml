@@ -1,9 +1,10 @@
 ﻿<Application x:Class="TrancborderTimeCalc.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="clr-namespace:TrancborderTimeCalc.ViewModel"
              xmlns:local="clr-namespace:TrancborderTimeCalc"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
+        <vm:ViewModelLocator x:Key="Locator" />
     </Application.Resources>
 </Application>

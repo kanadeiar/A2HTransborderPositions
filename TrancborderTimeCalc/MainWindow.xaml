@@ -5,8 +5,33 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TrancborderTimeCalc"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
+        Height="600" Width="1000" WindowStartupLocation="CenterScreen" ResizeMode="CanResizeWithGrip" Background="LightGreen"
+        Title="{Binding Title}"
+        DataContext="{Binding MainWindowViewModel, Source={StaticResource Locator}}">
+    <DockPanel>
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="Главное меню">
+                <Separator />
+                <MenuItem Header="Выход" 
+                          Command="{Binding CloseAppCommand}"/>
+            </MenuItem>
+            <MenuItem Header="Справка">
+                <MenuItem Header="О программе ..."/>
+            </MenuItem>
+        </Menu>
+        <StatusBar DockPanel.Dock="Bottom">
+            <StatusBarItem>
+                <TextBlock Text="Информация"/>
+            </StatusBarItem>            
+        </StatusBar>
+        <TabControl FontSize="14">
+            <TabItem Header="Расстановка массивов и порядок работы" Height="40">
+                
+            </TabItem>
+            <TabItem Header="Результаты" Height="40">
 
-    </Grid>
+            </TabItem>
+        </TabControl>
+
+    </DockPanel>
 </Window>
