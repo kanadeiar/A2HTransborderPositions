@@ -1,5 +1,7 @@
 ﻿
 
+
+
 namespace TrancborderTimeCalc;
 
 public partial class App : Application
@@ -14,7 +16,7 @@ public partial class App : Application
     private static void InitServices(IServiceCollection services)
     {
         services.AddScoped<RepositoryService>();
-
+        services.AddScoped<ISettings, Settings>();
 
         services.AddScoped<MainWindowViewModel>();
     }

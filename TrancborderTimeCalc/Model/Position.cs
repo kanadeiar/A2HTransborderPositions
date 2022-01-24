@@ -11,6 +11,15 @@ public class Position : Entity
         set => Set(ref _Name, value );
     }
 
+    private int _Number;
+    /// <summary> Номер позиции </summary>
+    public int Number
+    {
+        get => _Number;
+        set => Set(ref _Number, value);
+    }
+
+
     private int _Row;
     /// <summary> Ряд </summary>
     public int Row

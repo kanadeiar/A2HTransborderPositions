@@ -12,4 +12,5 @@ global using TrancborderTimeCalc.Model;
 global using TrancborderTimeCalc.Model.Base;
 global using TrancborderTimeCalc.ViewModel;
 global using TrancborderTimeCalc.Services;
-
+global using TrancborderTimeCalc.Interfaces;
+global using TrancborderTimeCalc.Data;

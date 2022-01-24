@@ -112,7 +112,20 @@
                     </GroupBox>
                     <GridSplitter Grid.Column="0" Width="5" Background="Transparent" />
                     <GroupBox Header="Порядок работы камеры" Grid.Column="1">
-                        
+                        <StackPanel>
+                            <TextBlock Text="Шаги работы трансбордера:" />
+                            <DataGrid Name="DataGridSteps" AutoGenerateColumns="False" GridLinesVisibility="Vertical" SelectionMode="Single" IsReadOnly="True" AlternatingRowBackground="Aquamarine"
+                                      ItemsSource="{Binding Dos}"
+                                      SelectedItem="{Binding SelectedDo}">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="№" Binding="{Binding Order}" />
+                                    <DataGridTextColumn Header="Название" Binding="{Binding Name}" Width="360" />
+                                    <DataGridTextColumn Header="Номер места" Binding="{Binding PositionNumber}"/>
+                                    <DataGridTextColumn Header="Время, секунд" Binding="{Binding Seconds}"/>
+                                    <DataGridTextColumn Header="Расчеты" Binding="{Binding Calc}"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </StackPanel>
                     </GroupBox>
                     
                 </Grid>
