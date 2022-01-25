@@ -1,6 +1,6 @@
 ﻿namespace TrancborderTimeCalc.Services;
 
-public class RepositoryService
+public class RepositoryService : IRepositoryService
 {
     private List<Position> _positions = GetInitPositions();
     private List<Do> _dos = GetInitDos();
