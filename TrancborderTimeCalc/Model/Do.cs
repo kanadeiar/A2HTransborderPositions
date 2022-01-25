@@ -25,12 +25,12 @@ public class Do : Entity
         get => _Doing;
         set => Set(ref _Doing, value);
     }
-    private int _PositionNumber;
+    private int _MassifNumber;
     /// <summary> Номер места куда или откуда делается действие </summary>
-    public int PositionNumber
+    public int MassifNumber
     {
-        get => _PositionNumber;
-        set => Set(ref _PositionNumber, value);
+        get => _MassifNumber;
+        set => Set(ref _MassifNumber, value);
     }
     private int _Seconds;
     /// <summary> Количество секунд на это действие </summary>

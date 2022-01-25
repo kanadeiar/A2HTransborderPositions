@@ -1,5 +1,6 @@
 ﻿namespace TrancborderTimeCalc.Interfaces;
 
+/// <summary> Сервис настроек </summary>
 public interface ISettings
 {
     /// <summary> Время на установку на место </summary>
