@@ -1,8 +1,4 @@
-﻿using System.Collections.ObjectModel;
-using System.Windows.Input;
-using TrancborderTimeCalc.Command;
-
-namespace TrancborderTimeCalc.ViewModel;
+﻿namespace TrancborderTimeCalc.ViewModel;
 
 class MainWindowViewModel : Base.ViewModel
 {
@@ -273,6 +269,17 @@ class MainWindowViewModel : Base.ViewModel
         OnPropertyChanged(nameof(ResultComment));
 
         App.Services.GetService<IDialogService>()?.ShowInfo($"Шаги сгенерированы, рассчеты выполнены.\nВремя: {ResultMinutes} мин. {ResultSeconds} сек., скорость: {SpeedOnMassif:F4} массивов/минуту.\n{ResultComment}");
+    }
+
+    private ICommand _ShowAboutCommand;
+    /// <summary> Открыть приложение о программе </summary>
+    public ICommand ShowAboutCommand => _ShowAboutCommand ??=
+        new LambdaCommand(OnShowAboutCommandExecuted, CanShowAboutCommandExecute);
+    private bool CanShowAboutCommandExecute(object p) => true;
+    private void OnShowAboutCommandExecuted(object p)
+    {
+        var form = new About();
+        form.ShowDialog();
     }
 
     private ICommand _CloseAppCommand;

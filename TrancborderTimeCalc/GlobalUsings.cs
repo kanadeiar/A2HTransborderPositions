@@ -14,3 +14,6 @@ global using TrancborderTimeCalc.ViewModel;
 global using TrancborderTimeCalc.Services;
 global using TrancborderTimeCalc.Interfaces;
 global using TrancborderTimeCalc.Data;
+global using System.Collections.ObjectModel;
+global using TrancborderTimeCalc.Command;
+global using TrancborderTimeCalc.Windows;

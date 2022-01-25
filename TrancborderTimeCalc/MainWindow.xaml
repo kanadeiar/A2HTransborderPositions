@@ -18,7 +18,8 @@
                           Command="{Binding CloseAppCommand}"/>
             </MenuItem>
             <MenuItem Header="Справка">
-                <MenuItem Header="О программе ..."/>
+                <MenuItem Header="О программе ..."
+                          Command="{Binding ShowAboutCommand}"/>
             </MenuItem>
         </Menu>
         <StatusBar DockPanel.Dock="Bottom">
