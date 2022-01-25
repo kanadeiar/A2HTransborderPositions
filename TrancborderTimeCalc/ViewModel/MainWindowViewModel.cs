@@ -38,6 +38,32 @@ class MainWindowViewModel : Base.ViewModel
         set => Set(ref _SelectedDo, value);
     }
 
+    #region Места с массивами
+
+    public string Massif2 => (Positions.SingleOrDefault(p => p.Number == 2)?.Massif > 0) ? $"массив № {Positions.SingleOrDefault(p => p.Number == 2)?.Massif.ToString()}" : "отсутствует";
+    public string Massif3 => (Positions.SingleOrDefault(p => p.Number == 3)?.Massif > 0) ? $"массив № {Positions.SingleOrDefault(p => p.Number == 3)?.Massif.ToString()}" : "отсутствует";
+    public string Massif4 => (Positions.SingleOrDefault(p => p.Number == 4)?.Massif > 0) ? $"массив № {Positions.SingleOrDefault(p => p.Number == 4)?.Massif.ToString()}" : "отсутствует";
+    public string Massif5 => (Positions.SingleOrDefault(p => p.Number == 5)?.Massif > 0) ? $"массив № {Positions.SingleOrDefault(p => p.Number == 5)?.Massif.ToString()}" : "отсутствует";
+    public string Massif6 => (Positions.SingleOrDefault(p => p.Number == 6)?.Massif > 0) ? $"массив № {Positions.SingleOrDefault(p => p.Number == 6)?.Massif.ToString()}" : "отсутствует";
+    public string Massif8 => (Positions.SingleOrDefault(p => p.Number == 8)?.Massif > 0) ? $"массив № {Positions.SingleOrDefault(p => p.Number == 8)?.Massif.ToString()}" : "отсутствует";
+    public string Massif10 => (Positions.SingleOrDefault(p => p.Number == 10)?.Massif > 0) ? $"массив № {Positions.SingleOrDefault(p => p.Number == 10)?.Massif.ToString()}" : "отсутствует";
+    public string Massif12 => (Positions.SingleOrDefault(p => p.Number == 12)?.Massif > 0) ? $"массив № {Positions.SingleOrDefault(p => p.Number == 12)?.Massif.ToString()}" : "отсутствует";
+    public string Massif14 => (Positions.SingleOrDefault(p => p.Number == 14)?.Massif > 0) ? $"массив № {Positions.SingleOrDefault(p => p.Number == 14)?.Massif.ToString()}" : "отсутствует";
+
+
+
+
+    #endregion
+
+
+    public int TimeToPlace => _settings.TimeToPlace;
+    public int TimeFromPlace => _settings.TimeFromPlace;
+    public int TimeOnRow => _settings.TimeOnRow;
+
+
+    public int ResultMinutes => Dos.Sum(d => d.Seconds) / 60;
+    public int ResultSeconds => Dos.Sum(d => d.Seconds) % 60;
+
 
     private string _Title = "Модель камеры созревания";
     /// <summary> Заголовок </summary>
@@ -81,6 +107,26 @@ class MainWindowViewModel : Base.ViewModel
         SelectPosition.Massif -= 1;
         if (SelectPosition.Massif < 0)
             SelectPosition.Massif = 0;
+    }
+
+    private ICommand _UpdatePlacesCommand;
+    /// <summary> Обновить графическое изображение мест хранения массивов </summary>
+    public ICommand UpdatePlacesCommand => _UpdatePlacesCommand ??=
+        new LambdaCommand(OnUpdatePlacesCommandExecuted, CanUpdatePlacesCommandExecute);
+    private bool CanUpdatePlacesCommandExecute(object p) => true;
+    private void OnUpdatePlacesCommandExecuted(object p)
+    {
+        OnPropertyChanged(nameof(Massif2));
+        OnPropertyChanged(nameof(Massif3));
+        OnPropertyChanged(nameof(Massif4));
+        OnPropertyChanged(nameof(Massif5));
+        OnPropertyChanged(nameof(Massif6));
+        OnPropertyChanged(nameof(Massif8));
+        OnPropertyChanged(nameof(Massif10));
+        OnPropertyChanged(nameof(Massif12));
+        OnPropertyChanged(nameof(Massif14));
+
+
     }
 
     private ICommand _CloseAppCommand;
@@ -133,7 +179,7 @@ class MainWindowViewModel : Base.ViewModel
             }
             if (item.Doing == TypeDoing.FromPositionToOutput)
             {
-                var nextrow = Positions.Single(p => p.Number == item.PositionNumber).Row;
+                var nextrow = Positions.Single(p => p.Massif == item.MassifNumber).Row;
                 sec += Math.Abs(row - nextrow) * _settings.TimeOnRow;
                 row = nextrow;                
             }
@@ -155,7 +201,7 @@ class MainWindowViewModel : Base.ViewModel
             }
             if (item.Doing == TypeDoing.FromInputToPosition || item.Doing == TypeDoing.FromTable1ToPosition || item.Doing == TypeDoing.FromTable2ToPosition)
             {
-                var nextrow = Positions.Single(p => p.Number == item.PositionNumber).Row;
+                var nextrow = Positions.Single(p => p.Massif == item.MassifNumber).Row;
                 sec2 += Math.Abs(row - nextrow) * _settings.TimeOnRow;
                 row = nextrow;
             }

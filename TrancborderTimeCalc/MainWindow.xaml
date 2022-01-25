@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TrancborderTimeCalc"
         mc:Ignorable="d"
-        Height="600" Width="1300" WindowStartupLocation="CenterScreen" ResizeMode="CanResizeWithGrip" Background="LightGreen"
+        Height="800" Width="1300" WindowStartupLocation="CenterScreen" ResizeMode="CanResizeWithGrip" Background="LightGreen"
         Title="{Binding Title}"
         DataContext="{Binding MainWindowViewModel, Source={StaticResource Locator}}">
     <DockPanel>
@@ -34,24 +34,26 @@
                     <GroupBox Header="Расстановка массивов" Grid.Column="0" Margin="0,0,5,0">
                         <Grid>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="250"/>
+                                <ColumnDefinition Width="300"/>
                                 <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
                                 <RowDefinition/>
                             </Grid.RowDefinitions>
-                            <DataGrid Grid.RowSpan="2" Name="DataGridPositions" AutoGenerateColumns="False" GridLinesVisibility="Vertical" SelectionMode="Single" IsReadOnly="True" AlternatingRowBackground="Aquamarine"
+                            <DataGrid Grid.RowSpan="3" Name="DataGridPositions" AutoGenerateColumns="False" GridLinesVisibility="Vertical" SelectionMode="Single" IsReadOnly="True" AlternatingRowBackground="Aquamarine"
                                       ItemsSource="{Binding Positions}"
                                       SelectedItem="{Binding SelectPosition}">
                                 <DataGrid.Columns>
                                     <DataGridTextColumn Header="Название" Binding="{Binding Name}" Width="160" />
-                                    <DataGridTextColumn Header="Массив" Binding="{Binding Massif}" Width="60" />
+                                    <DataGridTextColumn Header="Место" Binding="{Binding Number}" />
+                                    <DataGridTextColumn Header="Массив" Binding="{Binding Massif}" />
                                 </DataGrid.Columns>
                             </DataGrid>
                             <GroupBox DataContext="{Binding SelectPosition}" Grid.Column="1" Grid.Row="0" Header="Данные по выбранному">                                
                                 <StackPanel>                                    
-                                    <TextBlock VerticalAlignment="Center" Text="Номер массива:" Margin="5,5,5,0" />
+                                    <TextBlock VerticalAlignment="Center" Text="Номер по порядку массива:" Margin="5,5,5,0" />
                                     <Grid Margin="5, 0, 5, 0">
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="*" />
@@ -73,38 +75,73 @@
                                     </Grid>
                                 </StackPanel>
                             </GroupBox>
-                            <Canvas Grid.Column="1" Grid.Row="1">
-                                <TextBlock Text="406-е Прием" Width="150" Canvas.Left="210" Canvas.Top="20" Background="GreenYellow"/>
-                                <TextBlock Text="2-е" Width="150" Canvas.Left="10" Canvas.Top="20" Background="LightYellow"/>
-                                <TextBlock Text="3-е" Width="150" Canvas.Left="210" Canvas.Top="40" Background="LightYellow"/>
-                                <TextBlock Text="4-е" Width="150" Canvas.Left="10" Canvas.Top="40" Background="LightYellow"/>
-                                <TextBlock Text="5-е" Width="150" Canvas.Left="210" Canvas.Top="60" Background="LightYellow"/>
-                                <TextBlock Text="6-е" Width="150" Canvas.Left="10" Canvas.Top="60" Background="LightYellow"/>
-                                <TextBlock Text="8-е" Width="150" Canvas.Left="10" Canvas.Top="80" Background="LightYellow"/>
-                                <TextBlock Text="2-й ударный" Width="150" Canvas.Left="210" Canvas.Top="100" Background="LightBlue"/>
-                                <TextBlock Text="10-е" Width="150" Canvas.Left="10" Canvas.Top="100" Background="LightYellow"/>
-                                <TextBlock Text="1-й ударный" Width="150" Canvas.Left="210" Canvas.Top="120" Background="LightBlue"/>
-                                <TextBlock Text="12-е" Width="150" Canvas.Left="10" Canvas.Top="120" Background="LightYellow"/>
-                                <TextBlock Text="14-е" Width="150" Canvas.Left="10" Canvas.Top="140" Background="LightYellow"/>
-                                <TextBlock Text="15-е" Width="150" Canvas.Left="210" Canvas.Top="160" Background="LightYellow"/>
+                            <GroupBox Grid.Column="1" Grid.Row="1" Header="Графическое изображение мест">
+                                <StackPanel Orientation="Horizontal">
+                                    <Button Padding="5" Background="YellowGreen" Cursor="Hand"
+                                            Command="{Binding UpdatePlacesCommand}">
+                                        Обновить
+                                    </Button>
+                                </StackPanel>
+                            </GroupBox>
+                            <Canvas Grid.Column="1" Grid.Row="2">
+                                <TextBlock Text="406-е Прием" Width="150" Canvas.Left="170" Canvas.Top="20" Background="GreenYellow"/>
+                                <TextBlock Width="150" Canvas.Left="10" Canvas.Top="20" Background="LightYellow">
+                                    <TextBlock>2-е</TextBlock>
+                                    <TextBlock FontWeight="Bold" Text="{Binding Massif2}" />
+                                </TextBlock>
+                                <TextBlock Width="150" Canvas.Left="170" Canvas.Top="40" Background="LightYellow">
+                                    <TextBlock>3-е</TextBlock>
+                                    <TextBlock FontWeight="Bold" Text="{Binding Massif3}" />
+                                </TextBlock>
+                                <TextBlock Width="150" Canvas.Left="10" Canvas.Top="40" Background="LightYellow">
+                                    <TextBlock>4-е</TextBlock>
+                                    <TextBlock FontWeight="Bold" Text="{Binding Massif4}" />
+                                </TextBlock>
+                                <TextBlock Width="150" Canvas.Left="170" Canvas.Top="60" Background="LightYellow">
+                                    <TextBlock>5-е</TextBlock>
+                                    <TextBlock FontWeight="Bold" Text="{Binding Massif5}" />
+                                </TextBlock>
+                                <TextBlock Width="150" Canvas.Left="10" Canvas.Top="60" Background="LightYellow">
+                                    <TextBlock>6-е</TextBlock>
+                                    <TextBlock FontWeight="Bold" Text="{Binding Massif6}" />
+                                </TextBlock>
+                                <TextBlock Width="150" Canvas.Left="10" Canvas.Top="80" Background="LightYellow">
+                                    <TextBlock>8-е</TextBlock>
+                                    <TextBlock FontWeight="Bold" Text="{Binding Massif8}" />
+                                </TextBlock>
+                                <TextBlock Text="2-й ударный" Width="150" Canvas.Left="170" Canvas.Top="100" Background="LightBlue"/>
+                                <TextBlock Width="150" Canvas.Left="10" Canvas.Top="100" Background="LightYellow">
+                                    <TextBlock>10-е</TextBlock>
+                                    <TextBlock FontWeight="Bold" Text="{Binding Massif10}" />
+                                </TextBlock>
+                                <TextBlock Text="1-й ударный" Width="150" Canvas.Left="170" Canvas.Top="120" Background="LightBlue"/>
+                                <TextBlock Width="150" Canvas.Left="10" Canvas.Top="120" Background="LightYellow">
+                                    <TextBlock>12-е</TextBlock>
+                                    <TextBlock FontWeight="Bold" Text="{Binding Massif12}" />
+                                </TextBlock>
+                                <TextBlock Width="150" Canvas.Left="10" Canvas.Top="140" Background="LightYellow">
+                                    <TextBlock>14-е</TextBlock>
+                                    <TextBlock FontWeight="Bold" Text="{Binding Massif14}" />
+                                </TextBlock>
+                                <TextBlock Text="15-е" Width="150" Canvas.Left="170" Canvas.Top="160" Background="LightYellow"/>
                                 <TextBlock Text="16-е" Width="150" Canvas.Left="10" Canvas.Top="160" Background="LightYellow"/>
-                                <TextBlock Text="301-е Выдача" Width="150" Canvas.Left="210" Canvas.Top="180" Background="LightGray"/>
+                                <TextBlock Text="301-е Выдача" Width="150" Canvas.Left="170" Canvas.Top="180" Background="LightGray"/>
                                 <TextBlock Text="18-е" Width="150" Canvas.Left="10" Canvas.Top="180" Background="LightYellow"/>
-                                <TextBlock Text="19-е" Width="150" Canvas.Left="210" Canvas.Top="200" Background="LightYellow"/>
+                                <TextBlock Text="19-е" Width="150" Canvas.Left="170" Canvas.Top="200" Background="LightYellow"/>
                                 <TextBlock Text="20-е" Width="150" Canvas.Left="10" Canvas.Top="200" Background="LightYellow"/>
-                                <TextBlock Text="21-е" Width="150" Canvas.Left="210" Canvas.Top="220" Background="LightYellow"/>
+                                <TextBlock Text="21-е" Width="150" Canvas.Left="170" Canvas.Top="220" Background="LightYellow"/>
                                 <TextBlock Text="22-е" Width="150" Canvas.Left="10" Canvas.Top="220" Background="LightYellow"/>
-                                <TextBlock Text="23-е" Width="150" Canvas.Left="210" Canvas.Top="240" Background="LightYellow"/>
+                                <TextBlock Text="23-е" Width="150" Canvas.Left="170" Canvas.Top="240" Background="LightYellow"/>
                                 <TextBlock Text="24-е" Width="150" Canvas.Left="10" Canvas.Top="240" Background="LightYellow"/>
-                                <TextBlock Text="25-е" Width="150" Canvas.Left="210" Canvas.Top="260" Background="LightYellow"/>
+                                <TextBlock Text="25-е" Width="150" Canvas.Left="170" Canvas.Top="260" Background="LightYellow"/>
                                 <TextBlock Text="26-е" Width="150" Canvas.Left="10" Canvas.Top="260" Background="LightYellow"/>
-                                <TextBlock Text="27-е" Width="150" Canvas.Left="210" Canvas.Top="280" Background="LightYellow"/>
+                                <TextBlock Text="27-е" Width="150" Canvas.Left="170" Canvas.Top="280" Background="LightYellow"/>
                                 <TextBlock Text="28-е" Width="150" Canvas.Left="10" Canvas.Top="280" Background="LightYellow"/>
-                                <TextBlock Text="29-е" Width="150" Canvas.Left="210" Canvas.Top="300" Background="LightYellow"/>
+                                <TextBlock Text="29-е" Width="150" Canvas.Left="170" Canvas.Top="300" Background="LightYellow"/>
                                 <TextBlock Text="30-е" Width="150" Canvas.Left="10" Canvas.Top="300" Background="LightYellow"/>
-                                <TextBlock Text="31-е" Width="150" Canvas.Left="210" Canvas.Top="320" Background="LightYellow"/>
+                                <TextBlock Text="31-е" Width="150" Canvas.Left="170" Canvas.Top="320" Background="LightYellow"/>
                                 <TextBlock Text="32-е" Width="150" Canvas.Left="10" Canvas.Top="320" Background="LightYellow"/>
-                                <TextBlock Text="33-е" Width="150" Canvas.Left="210" Canvas.Top="340" Background="LightYellow"/>
+                                <TextBlock Text="33-е" Width="150" Canvas.Left="170" Canvas.Top="340" Background="LightYellow"/>
                                 <TextBlock Text="34-е" Width="150" Canvas.Left="10" Canvas.Top="340" Background="LightYellow"/>
                             </Canvas>
                             
@@ -112,20 +149,30 @@
                     </GroupBox>
                     <GridSplitter Grid.Column="0" Width="5" Background="Transparent" />
                     <GroupBox Header="Порядок работы камеры" Grid.Column="1">
-                        <StackPanel>
-                            <TextBlock Text="Шаги работы трансбордера:" />
-                            <DataGrid Name="DataGridSteps" AutoGenerateColumns="False" GridLinesVisibility="Vertical" SelectionMode="Single" IsReadOnly="True" AlternatingRowBackground="Aquamarine"
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            <TextBlock Text="Шаги работы трансбордера:" TextAlignment="Center" FontSize="20" />
+                            <StackPanel Grid.Row="1" Orientation="Horizontal">
+                                <Button Padding="10" Margin="0, 10" Background="LawnGreen" Cursor="Hand">
+                                    Генерировать шаги
+                                </Button>
+                            </StackPanel>
+                            <DataGrid Grid.Row="2" Name="DataGridSteps" AutoGenerateColumns="False" GridLinesVisibility="Vertical" SelectionMode="Single" IsReadOnly="True" AlternatingRowBackground="Aquamarine"
                                       ItemsSource="{Binding Dos}"
                                       SelectedItem="{Binding SelectedDo}">
                                 <DataGrid.Columns>
                                     <DataGridTextColumn Header="№" Binding="{Binding Order}" />
-                                    <DataGridTextColumn Header="Название" Binding="{Binding Name}" Width="360" />
-                                    <DataGridTextColumn Header="Номер места" Binding="{Binding PositionNumber}"/>
+                                    <DataGridTextColumn Header="Название" Binding="{Binding Name}" Width="280" />
+                                    <DataGridTextColumn Header="Массив" Binding="{Binding MassifNumber}"/>
                                     <DataGridTextColumn Header="Время, секунд" Binding="{Binding Seconds}"/>
                                     <DataGridTextColumn Header="Расчеты" Binding="{Binding Calc}"/>
                                 </DataGrid.Columns>
                             </DataGrid>
-                        </StackPanel>
+                        </Grid>
                     </GroupBox>
                     
                 </Grid>
@@ -133,15 +180,51 @@
             </TabItem>
             <TabItem Header="Характеристики" Height="40">
                 <GroupBox Header="Характеристики работы трансбордера в камере созревания">
-                    
-                </GroupBox>
-                
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="300"/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Grid.Column="0" Grid.Row="0" Text="Время выгрузки формы с трансбордера на место камеры созревания (секунд):" VerticalAlignment="Center"/>
+                        <TextBox Grid.Column="1" Grid.Row="0" Text="{Binding TimeToPlace, Mode=OneWay}" IsReadOnly="True" Padding="5" Margin="5" />
+                        <TextBlock Grid.Column="0" Grid.Row="1" Text="Время загрузки формы на трансбордер с места камеры созревания (секунд):" VerticalAlignment="Center"/>
+                        <TextBox Grid.Column="1" Grid.Row="1" Text="{Binding TimeFromPlace, Mode=OneWay}" IsReadOnly="True" Padding="5" Margin="5" />
+                        <TextBlock Grid.Column="0" Grid.Row="2" Text="Среднее время на перемещение трансбордера с одного места на другое (секунд):" VerticalAlignment="Center"/>
+                        <TextBox Grid.Column="1" Grid.Row="2" Text="{Binding TimeOnRow, Mode=OneWay}" IsReadOnly="True" Padding="5" Margin="5" />
+                    </Grid>                    
+                </GroupBox>                
             </TabItem>
             <TabItem Header="Результаты" Height="40">
                 <GroupBox Header="Результаты моделирования работы камеры созревания">
-                    
-                </GroupBox>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="300"/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Grid.Column="0" Grid.Row="0" Text="Общее время на один проход по всем позициям трансбордером (секунд):" VerticalAlignment="Center"/>
+                        <StackPanel Orientation="Horizontal" Grid.Column="1" >
+                            <TextBox Grid.Row="0" Text="{Binding ResultMinutes, Mode=OneWay}" Width="100" IsReadOnly="True" Padding="5" Margin="5" />
+                            <TextBlock Text="мин. " VerticalAlignment="Center"/>
+                            <TextBox Grid.Row="0" Text="{Binding ResultSeconds, Mode=OneWay}" Width="100" IsReadOnly="True" Padding="5" Margin="5" />
+                            <TextBlock Text="сек. " VerticalAlignment="Center"/>
+                        </StackPanel>
 
+
+
+                    </Grid>
+                </GroupBox>
             </TabItem>
         </TabControl>
 
