@@ -11,6 +11,8 @@
     <DockPanel>
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="Главное меню">
+                <MenuItem Header="Загрузить первоначальные данные"
+                          Command="{Binding LoadBasicDataCommand}"/>
                 <Separator />
                 <MenuItem Header="Выход" 
                           Command="{Binding CloseAppCommand}"/>
@@ -218,13 +220,14 @@
                                         Command="{Binding GenerateStepsCommand}">
                                     Сгенерировать шаги и рассчитать результаты
                                 </Button>
+                                <TextBlock Text="{Binding ResultComment}" FontSize="40" FontWeight="Bold" VerticalAlignment="Center" Margin="10,0" />
                             </StackPanel>
                             <DataGrid Grid.Row="2" Name="DataGridSteps" AutoGenerateColumns="False" GridLinesVisibility="Vertical" SelectionMode="Single" IsReadOnly="True" AlternatingRowBackground="Aquamarine"
                                       ItemsSource="{Binding Dos}"
                                       SelectedItem="{Binding SelectedDo}">
                                 <DataGrid.Columns>
                                     <DataGridTextColumn Header="№" Binding="{Binding Order}" />
-                                    <DataGridTextColumn Header="Название" Binding="{Binding Name}" Width="280" />
+                                    <DataGridTextColumn Header="Название" Binding="{Binding Name}" Width="340" />
                                     <DataGridTextColumn Header="Массив" Binding="{Binding MassifNumber}"/>
                                     <DataGridTextColumn Header="Время, секунд" Binding="{Binding Seconds}"/>
                                     <DataGridTextColumn Header="Расчеты" Binding="{Binding Calc}"/>
@@ -271,13 +274,15 @@
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
-                        <TextBlock Grid.Column="0" Grid.Row="0" Text="Общее время на один проход по всем позициям трансбордером (секунд):" VerticalAlignment="Center"/>
-                        <StackPanel Orientation="Horizontal" Grid.Column="1" >
-                            <TextBox Grid.Row="0" Text="{Binding ResultMinutes, Mode=OneWay}" Width="100" IsReadOnly="True" Padding="5" Margin="5" />
+                        <TextBlock Grid.Column="0" Grid.Row="0" Text="Общее время на один проход по всем массивам (секунд):" VerticalAlignment="Center"/>
+                        <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="0" >
+                            <TextBox Text="{Binding ResultMinutes, Mode=OneWay}" Width="100" IsReadOnly="True" Padding="5" Margin="5" />
                             <TextBlock Text="мин. " VerticalAlignment="Center"/>
-                            <TextBox Grid.Row="0" Text="{Binding ResultSeconds, Mode=OneWay}" Width="100" IsReadOnly="True" Padding="5" Margin="5" />
-                            <TextBlock Text="сек. " VerticalAlignment="Center"/>
+                            <TextBox Text="{Binding ResultSeconds, Mode=OneWay}" Width="100" IsReadOnly="True" Padding="5" Margin="5" />
+                            <TextBlock Text="сек. " VerticalAlignment="Center"/>                            
                         </StackPanel>
+                        <TextBlock Grid.Column="0" Grid.Row="1" Text="Скорость работы трансбордера (массивов/минуту):" VerticalAlignment="Center" />
+                        <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding SpeedOnMassif, Mode=OneWay, StringFormat=F4}" IsReadOnly="True" Padding="5" Margin="5" />
 
 
 

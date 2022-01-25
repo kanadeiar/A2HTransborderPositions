@@ -103,9 +103,51 @@ class MainWindowViewModel : Base.ViewModel
         }
     }
 
+    private int ResultMinimum = int.MaxValue;
+    public string ResultComment
+    {
+        get
+        {
+            var seconds = Dos.Sum(d => d.Seconds);
+            if (seconds < ResultMinimum - 3)
+            {
+                ResultMinimum = seconds;
+                return "Превосходно!";
+            }
+            if (seconds < ResultMinimum)
+            {
+                ResultMinimum = seconds;
+                return "Получше";
+            }
+            if (seconds == ResultMinimum)
+            {
+                return "Также";
+            }
+            if (seconds > ResultMinimum + 3)
+            {
+                return "Гораздо хуже!";
+            }
+            if (seconds > ResultMinimum + 10)
+            {
+                return "ХУЖЕ НЕКУДА!";
+            }
+            return "Хуже.";
+        }
+    }
+
     public int ResultMinutes => Dos.Sum(d => d.Seconds) / 60;
     public int ResultSeconds => Dos.Sum(d => d.Seconds) % 60;
 
+
+    public double SpeedOnMassif
+    {
+        get
+        {
+            double count = Dos.Count(d => d.MassifNumber != 0);
+            double time = Dos.Sum(d => d.Seconds) / 60.0;
+            return count / time;
+        }
+    }
 
     private string _Title = "Модель камеры созревания";
     /// <summary> Заголовок </summary>
@@ -127,6 +169,17 @@ class MainWindowViewModel : Base.ViewModel
     }
 
     #region Commands
+
+    private ICommand _LoadBasicDataCommand;
+    /// <summary> Загрузить начальные эталонные данные </summary>
+    public ICommand LoadBasicDataCommand => _LoadBasicDataCommand ??=
+        new LambdaCommand(OnLoadBasicDataCommandExecuted, CanLoadBasicDataCommandExecute);
+    private bool CanLoadBasicDataCommandExecute(object p) => true;
+    private void OnLoadBasicDataCommandExecuted(object p)
+    {
+        LoadData(true);
+        OnUpdatePlacesCommandExecuted(p);
+    }
 
     private ICommand _UpMassifCommand;
     /// <summary> Увеличить значение массива на еденицу </summary>
@@ -210,10 +263,16 @@ class MainWindowViewModel : Base.ViewModel
                 return;
             }
         }
+        Dos.Clear();
+        var dos = _generatorService.GenerateDos(Positions);
+        foreach (var item in dos)
+            Dos.Add(item);
+        OnPropertyChanged(nameof(ResultMinutes));
+        OnPropertyChanged(nameof(ResultSeconds));
+        OnPropertyChanged(nameof(SpeedOnMassif));
+        OnPropertyChanged(nameof(ResultComment));
 
-
-
-        App.Services.GetService<IDialogService>()?.ShowInfo($"Шаги сгенерированы, рассчеты выполнены.");
+        App.Services.GetService<IDialogService>()?.ShowInfo($"Шаги сгенерированы, рассчеты выполнены.\nВремя: {ResultMinutes} мин. {ResultSeconds} сек., скорость: {SpeedOnMassif:F4} массивов/минуту.\n{ResultComment}");
     }
 
     private ICommand _CloseAppCommand;
@@ -231,86 +290,18 @@ class MainWindowViewModel : Base.ViewModel
 
     #region Support
 
-    private void LoadData()
+    private void LoadData(bool initLoad = false)
     {
         Positions.Clear();
-        foreach (var item in _repositoryService.GetPositions())
+        var postions = (initLoad) 
+            ? _repositoryService.GetInitPositions() 
+            : _repositoryService.GetPositions();
+        foreach (var item in postions)
             Positions.Add(item);
         Dos.Clear();
-        var dos = _repositoryService.GetDos();
-        //var dos = _generatorService.GenerateDos(Positions);
+        var dos = _generatorService.GenerateDos(Positions);
         foreach (var item in dos)
             Dos.Add(item);
-
-        //var i = 1;
-        //foreach (var item in _repositoryService.GetDos())
-        //{
-        //    item.Order = i++;
-        //    Dos.Add(item);
-        //}
-
-        //var row = 9;
-        //foreach (var item in Dos)
-        //{
-        //    var sec = 0;
-        //    var sb = new StringBuilder();
-        //    //to 1
-        //    if (item.Doing == TypeDoing.FromInputToHitTable1 || item.Doing == TypeDoing.FromInputToHitTable2 || item.Doing == TypeDoing.FromInputToPosition)
-        //    {
-        //        sec += Math.Abs(row - 1) * _settings.TimeOnRow;
-        //        row = 1;                
-        //    }
-        //    if (item.Doing == TypeDoing.FromTable1ToPosition)
-        //    {
-        //        sec += Math.Abs(row - 6) * _settings.TimeOnRow;
-        //        row = 6;
-        //    }
-        //    if (item.Doing == TypeDoing.FromTable2ToPosition)
-        //    {
-        //        sec += Math.Abs(row - 5) * _settings.TimeOnRow;
-        //        row = 5;
-        //    }
-        //    if (item.Doing == TypeDoing.FromPositionToOutput)
-        //    {
-        //        var nextrow = Positions.Single(p => p.Massif == item.MassifNumber).Row;
-        //        sec += Math.Abs(row - nextrow) * _settings.TimeOnRow;
-        //        row = nextrow;                
-        //    }
-        //    sb.Append(sec.ToString());
-        //    //catch
-        //    sec += _settings.TimeFromPlace;
-        //    sb.Append($" + {_settings.TimeFromPlace}");
-        //    var sec2 = 0;
-        //    //to 2
-        //    if (item.Doing == TypeDoing.FromInputToHitTable1)
-        //    {
-        //        sec2 += Math.Abs(row - 6) * _settings.TimeOnRow;
-        //        row = 6;
-        //    }
-        //    if (item.Doing == TypeDoing.FromInputToHitTable2)
-        //    {
-        //        sec2 += Math.Abs(row - 5) * _settings.TimeOnRow;
-        //        row = 5;
-        //    }
-        //    if (item.Doing == TypeDoing.FromInputToPosition || item.Doing == TypeDoing.FromTable1ToPosition || item.Doing == TypeDoing.FromTable2ToPosition)
-        //    {
-        //        var nextrow = Positions.Single(p => p.Massif == item.MassifNumber).Row;
-        //        sec2 += Math.Abs(row - nextrow) * _settings.TimeOnRow;
-        //        row = nextrow;
-        //    }
-        //    if (item.Doing == TypeDoing.FromPositionToOutput)
-        //    {
-        //        sec2 += Math.Abs(row - 9) * _settings.TimeOnRow;
-        //        row = 9;
-        //    }
-        //    sb.Append($" + {sec2}");
-        //    //throw
-        //    sec2 += _settings.TimeToPlace;
-        //    sb.Append($" + {_settings.TimeToPlace}");
-
-        //    item.Seconds = sec + sec2;
-        //    item.Calc = sb.ToString();
-        //}
     }
 
     #endregion

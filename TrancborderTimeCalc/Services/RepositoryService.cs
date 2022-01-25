@@ -2,15 +2,17 @@
 
 public class RepositoryService : IRepositoryService
 {
-    private List<Position> _positions = GetInitPositions();
+    private List<Position> _positions;
     private List<Do> _dos = GetInitDos();
     public RepositoryService()
-    { }
+    {
+        _positions = GetInitPositions();
+    }
 
     public IEnumerable<Position> GetPositions() => _positions;
     public IEnumerable<Do> GetDos() => _dos;
 
-    private static List<Position> GetInitPositions()
+    public List<Position> GetInitPositions()
     {
         var positions = new List<Position>
         {
