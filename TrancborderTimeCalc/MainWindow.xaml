@@ -274,6 +274,7 @@
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
+                            <RowDefinition/>
                         </Grid.RowDefinitions>
                         <TextBlock Grid.Column="0" Grid.Row="0" Text="Общее время на один проход по всем массивам (секунд):" VerticalAlignment="Center"/>
                         <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="0" >
@@ -284,9 +285,14 @@
                         </StackPanel>
                         <TextBlock Grid.Column="0" Grid.Row="1" Text="Скорость работы трансбордера (массивов/минуту):" VerticalAlignment="Center" />
                         <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding SpeedOnMassif, Mode=OneWay, StringFormat=F4}" IsReadOnly="True" Padding="5" Margin="5" />
-
-
-
+                        <TextBlock Grid.Row="2" Grid.ColumnSpan="3" HorizontalAlignment="Center" FontSize="30">Эффективность массивов:</TextBlock>
+                        <DataGrid Grid.Row="3" Grid.ColumnSpan="3" Name="DataGridEffectives" AutoGenerateColumns="False" GridLinesVisibility="Vertical" SelectionMode="Single" IsReadOnly="True" AlternatingRowBackground="Aquamarine"
+                                  ItemsSource="{Binding Effectives}">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Массив" Binding="{Binding MassifNumber}" />
+                                <DataGridTextColumn Header="Время, секунд" Binding="{Binding Seconds}" />
+                            </DataGrid.Columns>                            
+                        </DataGrid>
                     </Grid>
                 </GroupBox>
             </TabItem>

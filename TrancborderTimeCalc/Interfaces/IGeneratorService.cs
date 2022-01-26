@@ -7,4 +7,8 @@ public interface IGeneratorService
     /// <param name="positions">Позиции форм</param>
     /// <returns>Шаги трансбордера</returns>
     public IEnumerable<Do> GenerateDos(IEnumerable<Position> positions, TypeFirstAction type = TypeFirstAction.FromInput);
+    /// <summary> Расчет эффективностей по массивам </summary>
+    /// <param name="Dos">Шаги трансбордера</param>
+    /// <returns>Эффективности</returns>
+    public IEnumerable<Effective> CalcEffectives(IEnumerable<Do> Dos);
 }

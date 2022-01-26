@@ -35,6 +35,9 @@ class MainWindowViewModel : Base.ViewModel
         set => Set(ref _SelectedDo, value);
     }
 
+    /// <summary> Эффективность массивов </summary>
+    public ObservableCollection<Effective> Effectives { get; set; } = new();
+
     #region Места с массивами
 
     public string Massif2 => (Positions.SingleOrDefault(p => p.Number == 2)?.Massif > 0) ? $"массив № {Positions.SingleOrDefault(p => p.Number == 2)?.Massif.ToString()}" : "-";
@@ -267,6 +270,9 @@ class MainWindowViewModel : Base.ViewModel
         OnPropertyChanged(nameof(ResultSeconds));
         OnPropertyChanged(nameof(SpeedOnMassif));
         OnPropertyChanged(nameof(ResultComment));
+        Effectives.Clear();
+        foreach (var item in _generatorService.CalcEffectives(dos))
+            Effectives.Add(item);
 
         App.Services.GetService<IDialogService>()?.ShowInfo($"Шаги сгенерированы, рассчеты выполнены.\nВремя: {ResultMinutes} мин. {ResultSeconds} сек., скорость: {SpeedOnMassif:F4} массивов/минуту.\n{ResultComment}");
     }
@@ -309,6 +315,9 @@ class MainWindowViewModel : Base.ViewModel
         var dos = _generatorService.GenerateDos(Positions);
         foreach (var item in dos)
             Dos.Add(item);
+        Effectives.Clear();
+        foreach (var item in _generatorService.CalcEffectives(dos))
+            Effectives.Add(item);
     }
 
     #endregion
