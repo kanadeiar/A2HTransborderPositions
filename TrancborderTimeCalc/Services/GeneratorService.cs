@@ -131,5 +131,21 @@ public class GeneratorService : IGeneratorService
 
         return list;
     }
+
+    public IEnumerable<Effective> CalcEffectives(IEnumerable<Do> dos)
+    {
+        var list = new List<Effective>();
+        int minMassif = dos.Where(p => p.MassifNumber != 0).Min(p => p.MassifNumber);
+        var maxMassif = dos.Max(p => p.MassifNumber);
+        for (var i = minMassif; i<= maxMassif; i++)
+        {
+            list.Add(new Effective
+            {
+                MassifNumber = i,
+                Seconds = dos.Where(d => d.MassifNumber == i).Sum(d => d.Seconds),
+            });
+        }
+        return list;
+    }
 }
 
